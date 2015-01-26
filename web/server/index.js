@@ -21,43 +21,19 @@ var Schema = mongoose.Schema;
 var Ranges = new Schema({
     start: {
         type: String,
-        required: true
+        required: false
     },
     end: {
         type: String,
-        required: true
+        required: false
     },
     startOffset: {
         type: Number,
-        required: false
+        required: true
     },
     endOffset: {
         type: Number,
-        required: false
-    }
-});
-var Shape = new Schema({
-    type: {
-        type: String,
         required: true
-    },
-    geometry: {
-        x: {
-            type: Number,
-            required: true
-        },
-        y: {
-            type: Number,
-            required: true
-        },
-        width: {
-            type: Number,
-            required: true
-        },
-        height: {
-            type: Number,
-            required: true
-        }
     }
 });
 // Annotation Model
@@ -91,31 +67,7 @@ var Annotation = new Schema({
         type: String,
         required: false
     },
-    quote: {
-        type: String,
-        required: false
-    },
-    uri: {
-        type: String,
-        required: false
-    },
-    src: {
-        type: String,
-        required: false
-    },
-    shapes: [Shape],
-    uuid: {
-        type: String,
-        required: false
-    },
-    parentIndex: {
-        type: String,
-        required: false
-    },
-    groups: [String],
-    subgroups: [String],
     ranges: [Ranges],
-    tags: [String],
     permissions: {
         read: [String],
         admin: [String],
@@ -146,6 +98,96 @@ app.get("/store/annotations/", function (req, res) {
 // ROUTES
 app.get('/api', function (req, res) {
     res.send('Annotations API is running');
+});
+// Routes taken straight from annotation-data-store
+app.get('/api/annotations', function (req, res) {
+    return AnnotationModel.find(function (err, annotations) {
+        if (!err) {
+            return res.send(annotations);
+        }
+        else {
+            return console.log(err);
+        }
+    });
+});
+// Single annotation
+app.get('/api/annotations/:id', function (req, res) {
+    return AnnotationModel.findById(req.params.id, function (err, annotation) {
+        if (!err) {
+            return res.send(annotation);
+        }
+        else {
+            return console.log(err);
+        }
+    });
+});
+// POST to CREATE
+app.post('/api/annotations', function (req, res) {
+    var annotation;
+    console.log("POST: ");
+    console.log(req.body);
+    annotation = new AnnotationModel({
+        user: req.body.user,
+        username: req.body.username,
+        consumer: "ExCiting Project",
+        annotator_schema_version: req.body.annotator_schema_version,
+        created: Date.now(),
+        updated: Date.now(),
+        text: req.body.text,
+        ranges: req.body.ranges,
+        permissions: req.body.permissions
+    });
+    console.log(annotation);
+    annotation.save(function (err) {
+        if (!err) {
+            return console.log("Created annotation with uuid: " + req.body.uuid);
+        }
+        else {
+            return console.log(err);
+        }
+    });
+    annotation.id = annotation._id;
+    return res.send(annotation);
+});
+// PUT to UPDATE
+// Single update
+app.put('/api/annotations/:id', function (req, res) {
+    return AnnotationModel.findById(req.params.id, function (err, annotation) {
+        annotation._id = req.body._id;
+        annotation.id = req.body._id;
+        annotation.user = req.body.user;
+        annotation.username = req.body.username;
+        annotation.consumer = "ExCiting Project";
+        annotation.annotator_schema_version = req.body.annotator_schema_version;
+        annotation.created = req.body.created;
+        annotation.updated = Date.now();
+        annotation.text = req.body.text;
+        annotation.ranges = req.body.ranges;
+        annotation.permissions = req.body.permissions;
+        return annotation.save(function (err) {
+            if (!err) {
+                console.log("updated");
+            }
+            else {
+                console.log(err);
+            }
+            return res.send(annotation);
+        });
+    });
+});
+// Remove an annotation
+app.delete('/api/annotations/:id', function (req, res) {
+    return AnnotationModel.findById(req.params.id, function (err, annotation) {
+        return annotation.remove(function (err) {
+            if (!err) {
+                console.log("removed");
+                return res.send(204, 'Successfully deleted annotation.');
+            }
+            else {
+                console.log(err);
+            }
+        });
+    });
 });
 server.listen(8080); // Dev server
 // server.listen(80); // Live server 
