@@ -6,13 +6,13 @@ var express = require('express');
 var swig  = require('swig');
 var http = require('http');
 
-// var STATIC_PATH : string = '../client';
+var STATIC_PATH : string = '../client';
 
 
 var app = express();
 var server = new http.Server(app);
 // Use the static path directory to serve our website
-// app.use(express.static(__dirname + STATIC_PATH));
+app.use(express.static(__dirname + STATIC_PATH));
 
 
 app.get("/", function(req, res) {
