@@ -1,1 +1,1 @@
-# ExCiting
+# ExCiting Project
