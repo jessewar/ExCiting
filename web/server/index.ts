@@ -3,7 +3,9 @@
 
 var express = require('express');
 // import session = require('express-session');
+var swig  = require('swig');
 var http = require('http');
+
 // var STATIC_PATH : string = '../client';
 
 
@@ -17,4 +19,6 @@ app.get("/", function(req, res) {
   res.send("We're running.");
 });
 
-server.listen(80);
+server.listen(8080); // Dev server
+
+// server.listen(80); // Live server
