@@ -1,0 +1,29 @@
+{
+  "name": "ExCiting-Annotations",
+  "version": "0.0.1",
+  "description": "",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "test": "test"
+  },
+  "dependencies": {
+    "chai": "~1.10.0"
+  },
+  "devDependencies": {
+    "mocha": "~2.1.0",
+    "typescript": "latest"
+  },
+  "scripts": {
+    "test": "mocha"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:grbritz/ExCiting.git"
+  },
+  "author": "",
+  "license": "BSD-2-Clause",
+  "bugs": {
+    "url": "https://github.com/grbritz/ExCiting/issues"
+  }
+}
