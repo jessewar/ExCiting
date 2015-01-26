@@ -15,7 +15,9 @@
     "typescript": "latest"
   },
   "scripts": {
-    "test": "mocha"
+    "test": "mocha",
+    "compile" : "node_modules/.bin/tsc server/*.ts --module commonjs; node_modules/.bin/tsc client/*.ts --module commonjs;",
+    "start"  : "node server/index.js"
   },
   "repository": {
     "type": "git",
