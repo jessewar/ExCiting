@@ -17,69 +17,72 @@ app.use(errorhandler({
 }));
 // Schemas
 var Schema = mongoose.Schema;
-// Annotation Ranges
-var Ranges = new Schema({
+// Text Range
+var TxtRange = new Schema({
     start: {
-        type: String,
-        required: false
+        type: Number,
+        required: true
     },
     end: {
-        type: String,
-        required: false
-    },
-    startOffset: {
         type: Number,
         required: true
-    },
-    endOffset: {
-        type: Number,
-        required: true
-    }
-});
-// Annotation Model
-var Annotation = new Schema({
-    id: {
-        type: String,
-        required: false
-    },
-    annotator_schema_version: {
-        type: String,
-        required: false,
-        default: version
-    },
-    created: {
-        type: Date,
-        default: Date.now()
-    },
-    updated: {
-        type: Date,
-        default: Date.now()
-    },
-    user: {
-        type: String,
-        required: false
-    },
-    username: {
-        type: String,
-        required: false
     },
     text: {
         type: String,
-        required: false
-    },
-    ranges: [Ranges],
-    permissions: {
-        read: [String],
-        admin: [String],
-        update: [String],
-        delete: [String]
+        required: true
     }
 });
-var AnnotationModel = mongoose.model('Annotation', Annotation);
-Annotation.pre('save', function (next) {
-    this.id = this._id;
-    next();
+// Annotation
+var Annotation = new Schema({
+    user_id: {
+        type: Number,
+        required: true
+    },
+    ranges: [TxtRange],
+    meta: {
+        version: Number,
+        timestamp: Date
+    }
 });
+// Chunks
+var Chunk = new Schema({
+    citer_paper: {
+        type: Number,
+        required: true
+    },
+    cited_paper: {
+        type: Number,
+        required: true
+    },
+    text: {
+        type: String,
+        required: true
+    },
+    citation_text: {
+        type: String,
+        required: true
+    },
+    annotations: [Annotation]
+});
+// Papers
+var Paper = new Schema({
+    _id: {
+        type: Number,
+        required: true
+    },
+    title: {
+        type: String,
+        required: true
+    },
+    text: {
+        type: String,
+        required: false // do we need this?
+    }
+});
+var TextRangeModel = mongoose.model('TextRange', TxtRange);
+var AnnotationModel = mongoose.model('Annotation', Annotation);
+var ChunkModel = mongoose.model('Chunk', Chunk);
+var PaperModel = mongoose.model('Paper', Paper);
 // DB
 mongoose.connect(dbPath);
 var db = mongoose.connection;
@@ -100,6 +103,7 @@ app.get('/api', function (req, res) {
     res.send('Annotations API is running');
 });
 // Routes taken straight from annotation-data-store
+// all the annotations!
 app.get('/api/annotations', function (req, res) {
     return AnnotationModel.find(function (err, annotations) {
         if (!err) {
