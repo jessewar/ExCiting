@@ -60,6 +60,8 @@ def main():
 
         citations[paper].append((citer, titles[citer]))
 
+    cite_map.close()
+
     # for now we just print the result
     for paper in citations:
         print(paper, citations[paper])
