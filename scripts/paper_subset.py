@@ -1,8 +1,6 @@
 import sys
 import shutil
 import os
-import subprocess
-
 
 def main():
   # Edit these lines to match your local filesystem
