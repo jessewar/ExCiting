@@ -4,4 +4,6 @@ do
     filename="${file#*raw/}"
     filename="${filename%.txt}"
     ../../parscit/bin/citeExtract.pl -m extract_all $file > ../data/paper_subset/chunks/"$filename.xml" 
+    # Get rid of it incase we have an interrupt
+    rm file
 done
