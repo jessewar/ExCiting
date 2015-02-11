@@ -35,16 +35,16 @@ for (var i = 0; i < citations.length; i++) {
   console.log(cited_paper_title);
   if (text.length > 0) {  // only do stuff if there is a reference to this paper within the text
 
-    // console.log(text);
-    // console.log(citation_text);
-    // console.log();
   }
   // get cited_paper id from cited_paper_title. Throw away paper if not within corpus
-
+  var paper_ids = fs.readFileSync("paper_ids.txt");
 }
 
 
 
+
+
+// MongoDB stuff
 
 // // compose documents
 // var paper = {'_id' : filename,
