@@ -45,7 +45,7 @@ def generate_context(chunk_text, cite_str):
 	# first, go left until we reach the beginning of a sentence
 	left = pos;
 	while left > 0:
-		if chunk_text[left] == ' ' and end_sentence.search(chunk_text[left-1]) is not None:
+		if chunk_text[left] == ' ' and re.search(end_sentence, chunk_text[left-1]) is not None:
 			break
 		elif chunk_text[left] == '(':
 			open_parans += 1
@@ -57,7 +57,7 @@ def generate_context(chunk_text, cite_str):
 	right = pos
 	close_parans == 0
 	while right < len(chunk_text):
-		if end_sentence.search(chunk_text[posright]) is not None:
+		if re.search(end_sentence, chunk_text[right]) is not None:
 			break
 		elif chunk_text[right] == '(':
 			open_parans += 1
@@ -67,13 +67,54 @@ def generate_context(chunk_text, cite_str):
 
 	# extract the exact sentence containing the chunk
 	sentence = chunk_text[left:right]
+	sentence = preprocess_sentence(sentence)
+
+	# print('chunk_text : ', chunk_text)
+	# print('cite_str : ', cite_str)
+	# print('sentence : ', sentence)
 
 	# route the sentence/cite_str to the appropriate context generator
 	# based off of how many individual citation blocks are present
-	if open_parans <= 1 and close_parans <= 1:
-		return gen_best_context_single_block(sentence, cite_str)
-	else:
-		return gen_best_context_multiple_blocks(sentence, cite_str)
+	try:
+		if open_parans <= 1 and close_parans <= 1:
+			return gen_best_context_single_block(sentence, cite_str)
+		else:
+			return gen_best_context_multiple_blocks(sentence, cite_str)
+	except Exception as err:
+		# give up, this only happens ~25 times on our data set due
+		# to unbalanced parans
+		return None
+
+def preprocess_chunk(chunk_text):
+	"""
+	Preprocesses a chunk string for citation context extraction.
+
+	Args:
+		chunk_text the chunk string to process
+	Returns:
+		a processed version of the chunk_text
+	"""
+
+	# do our best to remove periods
+	chunk_text.replace('e.g.', 'eg')
+	chunk_text.replace('i.e.', 'ie')
+	chunk_text.replace('etal.', 'et al')
+
+	return chunk_text
+
+def preprocess_sentence(sentence):
+	"""
+	Preprocesses a sentence for citation context extraction
+
+	Args:
+		sentence the sentence string to process
+	Returns:
+		a processed version of the sentence
+	"""
+
+	# at some point we'll want to get this to work
+	# re.escape(sentence)
+	return sentence
 
 def gen_best_context_single_block(sentence, cite_str):
 	"""
@@ -111,10 +152,10 @@ def gen_best_context_single_block(sentence, cite_str):
 		return match_obj.group(1)
 
 	# capture beginning of sentence but not citation at end of sentence
-	end_re = '(.*)([^(]*' + cite_str + '[^)]*\\)'
+	end_re = '(.*)\\([^(]*' + cite_str + '[^)]*\\)'
 	match_obj = re.search(end_re, sentence)
 	if match_obj is not None:
-		return match_obj.group(2)
+		return match_obj.group(1)
 
 	return None
 
@@ -138,34 +179,34 @@ def gen_best_context_multiple_blocks(sentence, cite_str):
 	"""
 
 	# capture text before citation and after preceding citation or comma
-	prefix_re = '([^,)]*)([^(]*' + cite_str + '[^)]*\\)'
+	prefix_re = '([^,)]*)\\([^(]*' + cite_str + '[^)]*\\)'
 	match_obj = re.search(prefix_re, sentence)
 	if match_obj is not None:
 		return match_obj.group(1)
 
 	return None
 
-def preprocess_chunk(chunk_text):
-	"""
-	Preprocesses a chunk string for citation context extraction.
-
-	Args:
-		chunk_text the chunk string to process
-	Returns:
-		a processed version of the chunk_text
-	"""
-
-	# turn i.e. and e.g. into ie, eg respectively
-	chunk_text.replace('e.g.', 'eg')
-	chunk_text.replace('i.e., ie')
-
-	return chunk_text
-
 def main():
+	"""
+	main
+	"""
+	# connect to mongod instance
 	client = pymongo.MongoClient()
+
+	# get database
 	db = client.mongodata
-	chunks = db.chunk
-	print(chunks.find_one())
+
+	# get chunk collection
+	chunk_col = db.chunk
+
+	for chunk_bson in chunk_col.find(
+	spec = {'citation_text': {'$ne' : 'null'}, 'text': {'$ne' : ''}},
+	fields = ['text', 'citation_text']):
+		chunk_id = chunk_bson['_id']
+		chunk_text = chunk_bson['text']
+		cite_str = chunk_bson['citation_text']
+
+		citation_context = generate_context(chunk_text, cite_str)
 
 if __name__ == '__main__':
 	main()
