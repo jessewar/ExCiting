@@ -9,6 +9,7 @@ examples of a single citation block.
 """
 
 import re
+import pymongo
 
 def generate_context(chunk_text, cite_str):
 	"""
@@ -46,11 +47,11 @@ def generate_context(chunk_text, cite_str):
 	while left > 0:
 		if chunk_text[left] == ' ' and end_sentence.search(chunk_text[left-1]) is not None:
 			break
-		elif chunk_text[left] == '('
-			open_parans++
+		elif chunk_text[left] == '(':
+			open_parans += 1
 		elif chunk_text[left] == ')':
-			close_parans++
-		left--
+			close_parans += 1
+		left -= 1
 
 	# next go right until we reach the end of a sentence
 	right = pos
@@ -58,11 +59,11 @@ def generate_context(chunk_text, cite_str):
 	while right < len(chunk_text):
 		if end_sentence.search(chunk_text[posright]) is not None:
 			break
-		elif chunk_text[right] == '('
-			open_parans++
+		elif chunk_text[right] == '(':
+			open_parans += 1
 		elif chunk_text[right] == ')':
-			close_parans++
-		right++
+			close_parans += 1
+		right += 1
 
 	# extract the exact sentence containing the chunk
 	sentence = chunk_text[left:right]
@@ -96,22 +97,23 @@ def gen_best_context_single_block(sentence, cite_str):
 	3. Some text (citation). (i.e. citation at end)
 	"""
 
-	match_obj = None
-
 	# capture beginning of sentence and end of sentence, but not
 	# the citation itself
 	middle_re = '(.*)\\([^(]*' + cite_str + '[^)]*\\)[, ](.*)'
-	if (match_obj = re.search(middle_re, sentence)) is not None:
+	match_obj = re.search(middle_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1) + match_obj.group(2)
 
 	# capture end of sentence but not citation at beginning of sentence
 	beginning_re = '\\([^(]*' + cite_str + '[^)]*\\)[, ](.*)'
-	if (match_obj = re.search(beginning_re, sentence)) is not None:
+	match_obj = re.search(beginning_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1)
 
 	# capture beginning of sentence but not citation at end of sentence
 	end_re = '(.*)([^(]*' + cite_str + '[^)]*\\)'
-	if (match_obj = re.search(end_re, sentence)) is not None:
+	match_obj = re.search(end_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(2)
 
 	return None
@@ -135,11 +137,10 @@ def gen_best_context_multiple_blocks(sentence, cite_str):
 	block associated with the specified cite_str.
 	"""
 
-	match_obj = None
-
 	# capture text before citation and after preceding citation or comma
 	prefix_re = '([^,)]*)([^(]*' + cite_str + '[^)]*\\)'
-	if (match_obj = re.search(prefix_re, sentence)) is not None:
+	match_obj = re.search(prefix_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1)
 
 	return None
@@ -161,8 +162,10 @@ def preprocess_chunk(chunk_text):
 	return chunk_text
 
 def main():
-	# nothing for now
-	print('hello!')
+	client = pymongo.MongoClient()
+	db = client.mongodata
+	chunks = db.chunk
+	print(chunks.find_one())
 
 if __name__ == '__main__':
 	main()
