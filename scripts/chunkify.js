@@ -10,33 +10,35 @@ populateTitleToIdMap();
 var dbPath = "mongodb://localhost/test";
 MongoClient.connect(dbPath, function(err, db) {
   var chunkCollection = db.collection("chunk");
+  var parsed_paper_directory = fs.readdirSync("/home/jesse/Classes/CSE454/ExCiting/data/paper_subset/chunks");
+  parsed_paper_directory.forEach(function(parsed_paper) {
+    // form xml
+    var parsed_paper_contents = fs.readFileSync("/home/jesse/Classes/CSE454/ExCiting/data/paper_subset/chunks/" + parsed_paper, "utf8");
+    var xml = new dom().parseFromString(parsed_paper_contents);
+    if (xml != undefined) {
+      // get paper related data
+      var paper_id = parsed_paper.substring(0, parsed_paper.indexOf("."));
+      var paper_title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml).toString();
 
-  // form xml
-  var parsed_paper = "Q13-1028.xml";
-  var parsed_paper_contents = fs.readFileSync(parsed_paper, "utf8");
-  var xml = new dom().parseFromString(parsed_paper_contents);
-
-  // get paper related data
-  var paper_id = parsed_paper.substring(0, parsed_paper.indexOf("."));
-  var paper_title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml).toString();
-
-  // get chunk related data
-  var citer_paper_id = paper_id;
-  var citations = xpath.select("//citation", xml);
-  for (var i = 0; i < citations.length; i++) {
-    var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
-    var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
-    var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
-    if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
-      var chunk = {"citer_paper" : citer_paper_id,
-                   "cited_paper" : cited_paper_id,
-                   "text" : chunk_text,
-                   "citation_text" : citation_text};
-      chunkCollection.insert(chunk, function(err, result) {
-        if (err) { console.log(err); }
-      });
+      // get chunk related data
+      var citer_paper_id = paper_id;
+      var citations = xpath.select("//citation", xml);
+      for (var i = 0; i < citations.length; i++) {
+	var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
+	var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
+	var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
+	if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
+          var chunk = {"citer_paper" : citer_paper_id,
+                       "cited_paper" : cited_paper_id,
+                       "text" : chunk_text,
+                       "citation_text" : citation_text};
+          chunkCollection.insert(chunk, function(err, result) {
+            if (err) { console.log(err); }
+          });
+	}
+      }
     }
-  }
+  });
   db.close();
 });
 
