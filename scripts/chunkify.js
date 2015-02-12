@@ -43,12 +43,13 @@ MongoClient.connect(dbPath, function(err, db) {
 });
 
 function populateTitleToIdMap() {
-  var paper_ids = fs.readFileSync("paper_ids.txt", "utf8").split("\n");
-  for (var i = 0; i < paper_ids.length; i++) {
-    var tokens = paper_ids[i].split("\t");
+  var paper_id_subset = fs.readFileSync("papers_above_threshold.txt", "utf8").split("\n");
+  var paper_id_and_title = fs.readFileSync("paper_ids.txt", "utf8").split("\n");
+  for (var i = 0; i < paper_id_and_title.length; i++) {
+    var tokens = paper_id_and_title[i].split("\t");
     var id = tokens[0];
     var title = tokens[1];
-    if (title != undefined && id != undefined) {
+    if (title != undefined && id != undefined && paper_id_subset.indexOf(id) > -1) {
       title_to_id[title.toLowerCase()] = id;
     }
   }
