@@ -1,46 +1,61 @@
 var fs = require("fs");
 var xpath = require("xpath");
 var dom = require("xmldom").DOMParser;
-//var MongoClient = require("mongodb");
+var MongoClient = require("mongodb");
 
-// var files = fs.readdirSync(process.argv[2]);  // command line argument is path to directory
-// files.forEach(function(file) {
-//   var filename = file.substring(0,file.indexOf("."));
-//   var filecontents = fs.readFileSync(file, "utf8");
-//   var xml = new dom().parseFromString(filecontents);
-//   var title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml);
-//   console.log(title);
-//   var citations = xpath.select("//citation", xml);
-//   for (var i = 0; i < citations.length; i++) {
-//     console.log(citations[i].toString());
-//   }
-// });
+// Build map of paper_title -> paper_id
+var title_to_id = {};
+populateTitleToIdMap();
 
-var file = "A00-1021.xml";
-var filecontents = fs.readFileSync(file, "utf8");
-var xml = new dom().parseFromString(filecontents);
+var dbPath = "mongodb://localhost/test";
+MongoClient.connect(dbPath, function(err, db) {
+  var chunkCollection = db.collection("chunk");
 
-// get paper related data
-var filename = file.substring(0, file.indexOf("."));
-var title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml).toString();
-console.log(title);
+  // form xml
+  var parsed_paper = "Q13-1028.xml";
+  var parsed_paper_contents = fs.readFileSync(parsed_paper, "utf8");
+  var xml = new dom().parseFromString(parsed_paper_contents);
 
-// get chunk related data
-var citer_paper = filename;
-var citations = xpath.select("//citation", xml);
-for (var i = 0; i < citations.length; i++) {
-  var cited_paper_title = xpath.select("title/text()[1]", citations[i]).toString();
-  var text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
-  var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString();
-  console.log(cited_paper_title);
-  if (text.length > 0) {  // only do stuff if there is a reference to this paper within the text
+  // get paper related data
+  var paper_id = parsed_paper.substring(0, parsed_paper.indexOf("."));
+  var paper_title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml).toString();
 
+  // get chunk related data
+  var citer_paper_id = paper_id;
+  var citations = xpath.select("//citation", xml);
+  for (var i = 0; i < citations.length; i++) {
+    var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
+    var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
+    var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
+    if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
+      var chunk = {"citer_paper" : citer_paper_id,
+                   "cited_paper" : cited_paper_id,
+                   "text" : chunk_text,
+                   "citation_text" : citation_text};
+      chunkCollection.insert(chunk, function(err, result) {
+        if (err) { console.log(err); }
+      });
+    }
   }
-  // get cited_paper id from cited_paper_title. Throw away paper if not within corpus
-  var paper_ids = fs.readFileSync("paper_ids.txt");
+  db.close();
+});
+
+function populateTitleToIdMap() {
+  var paper_ids = fs.readFileSync("paper_ids.txt", "utf8").split("\n");
+  for (var i = 0; i < paper_ids.length; i++) {
+    var tokens = paper_ids[i].split("\t");
+    var id = tokens[0];
+    var title = tokens[1];
+    if (title != undefined && id != undefined) {
+      title_to_id[title.toLowerCase()] = id;
+    }
+  }
 }
 
-
+function getPaperId(paper_title) {
+  var modified_title = paper_title.substring(0, paper_title.length-1).toLowerCase();  // take off period and do case insensitive comparison
+  return title_to_id[modified_title];
+}
 
 
 
@@ -48,7 +63,7 @@ for (var i = 0; i < citations.length; i++) {
 
 // // compose documents
 // var paper = {'_id' : filename,
-//        'title' : title};
+//        'title' : paper_title};
 
 // // insert into collections
 // var paperCollection = db.collection("paper");
