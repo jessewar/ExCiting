@@ -199,14 +199,27 @@ def main():
 	# get chunk collection
 	chunk_col = db.chunk
 
+	# get output collection
+	output_col = db.re_sentence_extractions
+
+	# things to insert
+	inserts = []
+
 	for chunk_bson in chunk_col.find(
 	spec = {'citation_text': {'$ne' : 'null'}, 'text': {'$ne' : ''}},
-	fields = ['text', 'citation_text']):
-		chunk_id = chunk_bson['_id']
+	fields = ['text', 'citation_text', 'cited_paper']):
+		chunk_id = str(chunk_bson['_id'])
 		chunk_text = chunk_bson['text']
 		cite_str = chunk_bson['citation_text']
+		cited_paper = chunk_bson['cited_paper']
 
 		citation_context = generate_context(chunk_text, cite_str)
+		if citation_context is not None:
+			inserts.append({'chunk_id' : chunk_id,
+				'cited_paper' : cited_paper,
+				'extraction' : citation_context})
+
+	# output_col.insert(inserts)
 
 if __name__ == '__main__':
 	main()
