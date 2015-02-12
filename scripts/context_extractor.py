@@ -9,6 +9,7 @@ examples of a single citation block.
 """
 
 import re
+import pymongo
 
 def generate_context(chunk_text, cite_str):
 	"""
@@ -44,35 +45,76 @@ def generate_context(chunk_text, cite_str):
 	# first, go left until we reach the beginning of a sentence
 	left = pos;
 	while left > 0:
-		if chunk_text[left] == ' ' and end_sentence.search(chunk_text[left-1]) is not None:
+		if chunk_text[left] == ' ' and re.search(end_sentence, chunk_text[left-1]) is not None:
 			break
-		elif chunk_text[left] == '('
-			open_parans++
+		elif chunk_text[left] == '(':
+			open_parans += 1
 		elif chunk_text[left] == ')':
-			close_parans++
-		left--
+			close_parans += 1
+		left -= 1
 
 	# next go right until we reach the end of a sentence
 	right = pos
 	close_parans == 0
 	while right < len(chunk_text):
-		if end_sentence.search(chunk_text[posright]) is not None:
+		if re.search(end_sentence, chunk_text[right]) is not None:
 			break
-		elif chunk_text[right] == '('
-			open_parans++
+		elif chunk_text[right] == '(':
+			open_parans += 1
 		elif chunk_text[right] == ')':
-			close_parans++
-		right++
+			close_parans += 1
+		right += 1
 
 	# extract the exact sentence containing the chunk
 	sentence = chunk_text[left:right]
+	sentence = preprocess_sentence(sentence)
+
+	# print('chunk_text : ', chunk_text)
+	# print('cite_str : ', cite_str)
+	# print('sentence : ', sentence)
 
 	# route the sentence/cite_str to the appropriate context generator
 	# based off of how many individual citation blocks are present
-	if open_parans <= 1 and close_parans <= 1:
-		return gen_best_context_single_block(sentence, cite_str)
-	else:
-		return gen_best_context_multiple_blocks(sentence, cite_str)
+	try:
+		if open_parans <= 1 and close_parans <= 1:
+			return gen_best_context_single_block(sentence, cite_str)
+		else:
+			return gen_best_context_multiple_blocks(sentence, cite_str)
+	except Exception as err:
+		# give up, this only happens ~25 times on our data set due
+		# to unbalanced parans
+		return None
+
+def preprocess_chunk(chunk_text):
+	"""
+	Preprocesses a chunk string for citation context extraction.
+
+	Args:
+		chunk_text the chunk string to process
+	Returns:
+		a processed version of the chunk_text
+	"""
+
+	# do our best to remove periods
+	chunk_text.replace('e.g.', 'eg')
+	chunk_text.replace('i.e.', 'ie')
+	chunk_text.replace('etal.', 'et al')
+
+	return chunk_text
+
+def preprocess_sentence(sentence):
+	"""
+	Preprocesses a sentence for citation context extraction
+
+	Args:
+		sentence the sentence string to process
+	Returns:
+		a processed version of the sentence
+	"""
+
+	# at some point we'll want to get this to work
+	# re.escape(sentence)
+	return sentence
 
 def gen_best_context_single_block(sentence, cite_str):
 	"""
@@ -96,23 +138,24 @@ def gen_best_context_single_block(sentence, cite_str):
 	3. Some text (citation). (i.e. citation at end)
 	"""
 
-	match_obj = None
-
 	# capture beginning of sentence and end of sentence, but not
 	# the citation itself
 	middle_re = '(.*)\\([^(]*' + cite_str + '[^)]*\\)[, ](.*)'
-	if (match_obj = re.search(middle_re, sentence)) is not None:
+	match_obj = re.search(middle_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1) + match_obj.group(2)
 
 	# capture end of sentence but not citation at beginning of sentence
 	beginning_re = '\\([^(]*' + cite_str + '[^)]*\\)[, ](.*)'
-	if (match_obj = re.search(beginning_re, sentence)) is not None:
+	match_obj = re.search(beginning_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1)
 
 	# capture beginning of sentence but not citation at end of sentence
-	end_re = '(.*)([^(]*' + cite_str + '[^)]*\\)'
-	if (match_obj = re.search(end_re, sentence)) is not None:
-		return match_obj.group(2)
+	end_re = '(.*)\\([^(]*' + cite_str + '[^)]*\\)'
+	match_obj = re.search(end_re, sentence)
+	if match_obj is not None:
+		return match_obj.group(1)
 
 	return None
 
@@ -135,34 +178,48 @@ def gen_best_context_multiple_blocks(sentence, cite_str):
 	block associated with the specified cite_str.
 	"""
 
-	match_obj = None
-
 	# capture text before citation and after preceding citation or comma
-	prefix_re = '([^,)]*)([^(]*' + cite_str + '[^)]*\\)'
-	if (match_obj = re.search(prefix_re, sentence)) is not None:
+	prefix_re = '([^,)]*)\\([^(]*' + cite_str + '[^)]*\\)'
+	match_obj = re.search(prefix_re, sentence)
+	if match_obj is not None:
 		return match_obj.group(1)
 
 	return None
 
-def preprocess_chunk(chunk_text):
-	"""
-	Preprocesses a chunk string for citation context extraction.
-
-	Args:
-		chunk_text the chunk string to process
-	Returns:
-		a processed version of the chunk_text
-	"""
-
-	# turn i.e. and e.g. into ie, eg respectively
-	chunk_text.replace('e.g.', 'eg')
-	chunk_text.replace('i.e., ie')
-
-	return chunk_text
-
 def main():
-	# nothing for now
-	print('hello!')
+	"""
+	main
+	"""
+	# connect to mongod instance
+	client = pymongo.MongoClient()
+
+	# get database
+	db = client.mongodata
+
+	# get chunk collection
+	chunk_col = db.chunk
+
+	# get output collection
+	output_col = db.re_sentence_extractions
+
+	# things to insert
+	inserts = []
+
+	for chunk_bson in chunk_col.find(
+	spec = {'citation_text': {'$ne' : 'null'}, 'text': {'$ne' : ''}},
+	fields = ['text', 'citation_text', 'cited_paper']):
+		chunk_id = str(chunk_bson['_id'])
+		chunk_text = chunk_bson['text']
+		cite_str = chunk_bson['citation_text']
+		cited_paper = chunk_bson['cited_paper']
+
+		citation_context = generate_context(chunk_text, cite_str)
+		if citation_context is not None:
+			inserts.append({'chunk_id' : chunk_id,
+				'cited_paper' : cited_paper,
+				'extraction' : citation_context})
+
+	# output_col.insert(inserts)
 
 if __name__ == '__main__':
 	main()
