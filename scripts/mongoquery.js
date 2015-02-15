@@ -7,6 +7,14 @@ db.re_sentence_extractions.aggregate([
     },
     "extractions": {
       "$push" : "$extraction"
+    },
+    "num_extractions": {
+      "$sum" : 1
+    }
+  }},
+  {"$match" :{
+    "num_extractions" : {
+      "$gte" : 30
     }
   }}
 ])
