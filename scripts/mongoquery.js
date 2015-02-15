@@ -1,3 +1,4 @@
+// Usage: cat filename | mongo
 use mongodata
 db.re_sentence_extractions.aggregate([
   {"$group" : {
