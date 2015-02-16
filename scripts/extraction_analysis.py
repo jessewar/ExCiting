@@ -12,13 +12,15 @@ db = connection.mongodata
 collection = db.re_sentence_extractions
 
 def main():
-  papers_and_extractions = remove_stopwords(get_extractions_above_threshold(30))
+  raw_extractions = get_extractions_above_threshold(30)
+  cleaned_extractions = remove_stopwords(raw_extractions)
   
   # for paper_id in papers_and_extractions:
   #   topics = lda_topics(papers_and_extractions[paper_id])
 
-  topics = lda_topics(papers_and_extractions["N03-1033"])
-
+  # topics = lda_topics(papers_and_extractions["N03-1033"])
+  topics = lda_topics(raw_extractions["N03-1033"])
+  print topics
 
 
 
@@ -27,16 +29,32 @@ Takes: extractions = [<extraction>, <extraction>, ...]
        topics = [ { <word_in_topic_model> : <count of word>, ... } ]
 Returns: [{topic: {<topic_makeup>}, extractions: [<extractions for this topic>]}, ...]
 '''
-def cluster_extractions_by_topics(extractions, topics):
+# def cluster_extractions_by_topics(extractions, topics):
+#   for sentence in extractions:
+#     word_counts = words_and_counts(sentence)
 
-    
 
+
+'''
+Takes: a string
+Returns: {<word> : <count of word in string>, ...}
+'''
+def words_and_counts(string):
+  counts = {}
+  for word in string.split(" "):
+    if word in counts:
+      counts[word] += 1
+    else:
+      counts[word] = 1
+
+  return counts
 
 def lda_topics(extractions):
   payload = json.dumps( [extractions, 3] )
   head = {'Authorization': '9ec383f01ca242b3a366bc538ee50b0c', 'Content-Type' : 'application/json'}
   req = requests.post("https://api.algorithmia.com/api/kenny/LDA",data=payload, headers=head)
-  return req.text['result']
+  parsed = json.loads(req.text)
+  return parsed[u'result']
 
 
 '''

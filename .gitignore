@@ -1,0 +1,6 @@
+#OSX Junk
+*.DS_Store
+
+output/
+data/
+annotation-data-store/
