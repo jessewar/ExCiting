@@ -13,12 +13,8 @@ collection = db.re_sentence_extractions
 
 def main():
   raw_extractions = get_extractions_above_threshold(30)
-  cleaned_extractions = remove_stopwords(raw_extractions)
+  # cleaned_extractions = remove_stopwords(raw_extractions)
   
-  # for paper_id in papers_and_extractions:
-  #   topics = lda_topics(papers_and_extractions[paper_id])
-
-  # topics = lda_topics(papers_and_extractions["N03-1033"])
   topics = lda_topics(raw_extractions["N03-1033"])
   print topics
 
