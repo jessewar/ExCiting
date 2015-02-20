@@ -194,10 +194,10 @@ def main():
 	client = pymongo.MongoClient()
 
 	# get database
-	db = client.mongodata
+	db = client.exciting
 
 	# get chunk collection
-	chunk_col = db.chunk
+	chunk_col = db.chunks
 
 	# get output collection
 	output_col = db.re_sentence_extractions

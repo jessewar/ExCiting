@@ -7,9 +7,9 @@ var MongoClient = require("mongodb");
 var title_to_id = {};
 populateTitleToIdMap();
 
-var dbPath = "mongodb://localhost/test";
+var dbPath = "mongodb://localhost/exciting";
 MongoClient.connect(dbPath, function(err, db) {
-  var chunkCollection = db.collection("chunk");
+  var chunkCollection = db.collection("chunks");
   var parsed_paper_directory = fs.readdirSync("/home/jesse/Classes/CSE454/ExCiting/data/paper_subset/chunks");
   parsed_paper_directory.forEach(function(parsed_paper) {
     // form xml
@@ -24,10 +24,10 @@ MongoClient.connect(dbPath, function(err, db) {
       var citer_paper_id = paper_id;
       var citations = xpath.select("//citation", xml);
       for (var i = 0; i < citations.length; i++) {
-	var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
-	var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
-	var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
-	if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
+      	var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
+      	var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
+      	var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
+      	if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
           var chunk = {"citer_paper" : citer_paper_id,
                        "cited_paper" : cited_paper_id,
                        "text" : chunk_text,
@@ -69,10 +69,10 @@ function getPaperId(paper_title) {
 //        'title' : paper_title};
 
 // // insert into collections
-// var paperCollection = db.collection("paper");
-// var chunkCollection = db.collection("chunk");
+// var paperCollection = db.collection("papers");
+// var chunkCollection = db.collection("chunks");
 // paperCollection.insert(paper, function(err, result) {});
 
 
-// var dbPath = "mongodb://localhost/test";
+// var dbPath = "mongodb://localhost/exciting";
 // MongoClient.connect(dbPath, function(err, db) {

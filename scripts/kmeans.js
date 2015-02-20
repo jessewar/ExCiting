@@ -3,7 +3,7 @@ var MongoClient = require("mongodb");
 var stopwords = require("stopwords").english;
 var clusterfck = require("clusterfck");
 
-var dbPath = "mongodb://localhost/mongodata";
+var dbPath = "mongodb://localhost/exciting";
 MongoClient.connect(dbPath, function(err, db) {
   var extractionCollection = db.collection("re_sentence_extractions");
   var clusterCollection = db.collection("clusters");
