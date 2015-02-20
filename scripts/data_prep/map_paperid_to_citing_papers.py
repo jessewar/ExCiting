@@ -1,6 +1,7 @@
 """
-Generates a mapping from paper ID to a tuple (paperID, name of paper) of papers 
-that cite it within the ACL corpus. Implicitly this involves:
+Generates a mapping from paper ID to a list of of papers that cite it within the ACL corpus.
+These results are in the form {paper_id : [(paper_id, paper_title), ...], ...}.
+Implicitly this involves:
 
 1. Parsing acl.txt. acl.txt is a list of line-seperated mappings of the form
 paperID ==> paperID where the paper on the left of the mapping cites the paper
@@ -26,6 +27,15 @@ def main():
     cite_map_path = sys.argv[1]
     name_map_path = sys.argv[2]
 
+    papers = paperid_to_citing_papers(cite_map_path, name_map_path)
+   
+
+    # for now we just print the result
+    for paper in papers:
+        print(paper, papers[paper])
+
+
+def paperid_to_citing_papers(cite_map_path, name_map_path):
     # maps paperID -> title
     titles = {}
 
@@ -42,7 +52,7 @@ def main():
         titles[line[:8]] = line[9:len(line)-5].rstrip()
 
     # maps paperID -> list of names of papers that cite it
-    citations = {}
+    papers = {}
 
     cite_map = None
 
@@ -55,16 +65,14 @@ def main():
     for line in cite_map:
         # lines are in the format A00-1234 ==> B55-6789
         citer, _, paper = line.rstrip().partition(' ==> ')
-        if paper not in citations:
-            citations[paper] = list()
+        if paper not in papers:
+            papers[paper] = list()
 
-        citations[paper].append((citer, titles[citer]))
+        papers[paper].append((citer, titles[citer]))
 
     cite_map.close()
 
-    # for now we just print the result
-    for paper in citations:
-        print(paper, citations[paper])
+    return papers
 
 
 if __name__ == '__main__':
