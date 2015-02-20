@@ -7,7 +7,7 @@ var dbPath = "mongodb://localhost/exciting";
 MongoClient.connect(dbPath, function(err, db) {
   var extractionCollection = db.collection("re_sentence_extractions");
   var clusterCollection = db.collection("clusters");
-  var papers_above_threshold = fs.readFileSync("./papers_above_threshold.txt", "utf8").split("\n");
+  var papers_above_threshold = fs.readFileSync("../../data/papers_above_threshold.txt", "utf8").split("\n");
   papers_above_threshold.forEach(function(paper_id) {
     extractionCollection.find({cited_paper:paper_id}).toArray(function(err, documents) {
       var dictionary = [];
