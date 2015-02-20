@@ -3,6 +3,13 @@ import extraction_analysis
 import pprint
 # from nltk.tokenize import sent_tokenize
 
+
+'''
+Performs summarization by concatenating all of the the extractions
+together into a single document. It then pulls out the sentences that contain
+the words with the highest frequencies in the document and uses those as the 
+summaries. It outputs 3 summaries per document.
+'''
 def main():
   summarizer = frequency_summarizer.FrequencySummarizer()
   extractions = extraction_analysis.get_extractions_above_threshold(25)
@@ -18,13 +25,6 @@ def main():
 
   pp = pprint.PrettyPrinter(indent=2)
   pp.pprint(papers_and_summaries)
-
-
-  # print document
-  # print sent_tokenize(document)
-  # print 
-
-
 
 if __name__ == '__main__':
   main()
