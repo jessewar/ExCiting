@@ -1,5 +1,9 @@
+import sys
+#haaaccky
+sys.path.append('../extract/')
+
 import frequency_summarizer
-import extraction_analysis
+import get_extractions
 import pprint
 # from nltk.tokenize import sent_tokenize
 
@@ -12,7 +16,7 @@ summaries. It outputs 3 summaries per document.
 '''
 def main():
   summarizer = frequency_summarizer.FrequencySummarizer()
-  extractions = extraction_analysis.get_extractions_above_threshold(25)
+  extractions = get_extractions.above_threshold(25, 're_sentence_extractions')
 
 
   papers_and_summaries = {}

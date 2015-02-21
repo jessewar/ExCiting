@@ -32,10 +32,7 @@ def main():
     paper_summaries[doc[u'cited_paper']] = [cluster1summary, cluster2summary, cluster3summary]
 
 
-  
   pp.pprint(paper_summaries)
-
-
 
 
 
