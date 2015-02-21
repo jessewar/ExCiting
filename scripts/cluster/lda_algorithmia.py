@@ -1,18 +1,24 @@
+import sys
+#haaaccky
+sys.path.append('../extract/')
+
 import string
 import nltk
 from nltk.corpus import stopwords
 import pymongo
 import requests
 import json
+import get_extractions
+
 
 
 # establish a connection to the database
 connection = pymongo.MongoClient("localhost", 27017)
-db = connection.mongodata
+db = connection.exciting
 collection = db.re_sentence_extractions
 
 def main():
-  raw_extractions = get_extractions_above_threshold(30)
+  raw_extractions = get_extractions.above_threshold(30)
   # cleaned_extractions = remove_stopwords(raw_extractions)
   
   topics = lda_topics(raw_extractions["N03-1033"])
@@ -53,35 +59,6 @@ def lda_topics(extractions):
   return parsed[u'result']
 
 
-'''
-Returns {'paper_id' : [<extractions>], ...}
-'''
-def get_extractions_above_threshold(threshold):
-  grouped_extractions = collection.aggregate([
-    {"$group" : {
-      "_id" : {
-        "cited_paper" : "$cited_paper"
-      },
-      "extractions": {
-        "$push" : "$extraction"
-      },
-      "num_extractions": {
-        "$sum" : 1
-      }
-    }},
-    {"$match" : {
-      "num_extractions" : {
-        "$gte" : threshold
-      }
-    }}])
-
-  # transform into hash we expect
-  result = {}
-  for row in grouped_extractions['result']:
-    result[row[u'_id'][u'cited_paper']] = row[u'extractions']    
-
-
-  return result
 
 '''
 Takes {'paper_id' : [<extractions>], ...}
