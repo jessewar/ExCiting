@@ -1,7 +1,15 @@
 import pymongo
+import naive_document_summarization
 import frequency_summarizer
 import pprint
 
+
+# connect to mongod instance
+client = pymongo.MongoClient()
+
+# get database
+db = client.exciting
+pp = pprint.PrettyPrinter(indent=2)
 '''
 Uses the word-based frequency summarizer / extractor and the first round of
 our k-means clustering results. Creates a document by concatenating together
@@ -9,19 +17,21 @@ all of the extractions within a cluster, then uses the summarizer on that docume
 to return 1 sentence.
 '''
 def main():
-  # connect to mongod instance
-  client = pymongo.MongoClient()
+  paper_summaries = get_summaries()  
+  
+  for paper_id in sorted(paper_summaries):
+    pp.pprint(paper_id)
+    pp.pprint(paper_summaries[paper_id])
 
-  # get database
-  db = client.exciting
+  # pp.pprint(paper_summaries)
+
+
+def get_summaries():
+  summarizer = frequency_summarizer.FrequencySummarizer()
 
   # get collection
   collection = db.clusters
   clusters = collection.find()
-  
-
-  summarizer = frequency_summarizer.FrequencySummarizer()
-  pp = pprint.PrettyPrinter(indent=2)
 
   paper_summaries = {}
   for doc in clusters:
@@ -30,12 +40,16 @@ def main():
     cluster3summary = summarizer.summarize(".".join(doc[u'2']), 1) if u'2' in doc else ""
     
     paper_summaries[doc[u'cited_paper']] = [cluster1summary, cluster2summary, cluster3summary]
+  return paper_summaries
 
+# def compare_to_naive():
+#   k_means = get_summaries()
+#   naive = naive_document_summarization.get_summaries()
 
-  pp.pprint(paper_summaries)
-
-
-
+#   k_paper_ids =sorted(k_means)
+#   # naive_paper_ids =sorted(naive)
+#   for paper_id in k_paper_ids:
+#     print "Comparing"
 
 
 if __name__ == '__main__':
