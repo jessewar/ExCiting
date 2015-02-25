@@ -1,0 +1,276 @@
+u'A00-2018'
+[ u'1 Introduction Treebank-based probabilistic parsing has been the subject of intensive research over the past few years, resulting in parsing models that achieve both broad coverage and high parsing accuracy .',
+  u'1 Introduction Recent successes in statistical syntactic parsing based on supervised techniques trained on a large corpus of syntactic trees have brought the hope that the same approach could be applied to the more ambitious goal of recovering the propositional content and the frame semantics of a sentence.',
+  u'1 Introduction Syntactic parsing has made tremendous progress in the past 2 decades  and accurate syntactic parsing is often assumed when developing other natural language applications.']
+u'A88-1019'
+[ u'So, in the UdB corpus, lopen occurs 92 times as an infinitive and 43 times as a finite plural, so the MLE 1 Even models of disambiguation that make use of context, such as statistical n-gram taggers, often presume some estimate of lexical priors, in addition to requiring estimates of the transition probabilities of sequences of lexical tags  and this again brings up the question of what to do about unseen or low-frequency forms.',
+  u'3 Data Co l lec t ion For our experiments, we use the 21 million word 1987 Wall Street Journal corpus 4, automatically annotated with part-of-speech tags using the PARTS tagger .',
+  u"The material is first processed using Ken Church's tagger  which labels it as if it were Brown Corpus material, and then is mapped to our tagset by a SEDscript."]
+u'A92-1021'
+[ u"We restrict he test to senses within a single part of speech to focus the work on the harder part of the disambiguation problem--the accuracy of simple stochastic part-of-speech taggers uch as Brill's suggests that distinguishing among senses with different parts of speech can readily be accomplished.",
+  u'Par t of speech tagger The text is the part of speech tagged using the Brill tagger .',
+  u'3.1 Preprocessing Before the filters or partial taggers are applied the text is tokenised, lemmatised, split into sentences and part-of-speech tagged using the Brill part-ofspeech tagger .']
+u'C92-2082'
+[ u'2 Related Work There is a long history of methods using suface-level lexical patterns for extracting relational facts from text corpora .',
+  u'This is similar in nature to Hearst?s lexico-syntactic patterns and other approaches that derive ISA relations from text.',
+  u'Although we used the classical lexico-syntactic patterns for hyponymy acquisition to reflect this intuition, our experiments show we were unable to attain satisfactory performance using lexico-syntactic patterns alone.']
+u'C96-1058'
+[ u'This formulation leads to efficient parsing algorithms for both projective and non-projective dependency trees with the Eisner algorithm .',
+  u'As far as we know, this makes it different from all previous systems for dependency parsing applied to the Penn Treebank  although there are systems that extract labeled grammatical relations based on shallow parsing, e. and maximum spanning tree based dependency parsing .',
+  u'Taking Chinese as a projective language, we use Eisner?s algorithm to combine multiple dependency parses.']
+u'C96-2141'
+[ u'The alignment aspect of our model is similar to the HMM model for word alignment .',
+  u'We can induce these alignments using an HMM-based alignment model where the probability of alignment aj is dependent only on the previous alignment at aj?1 .',
+  u'1 Introduction The IBM and HMM word alignment models have underpinned the majority of statistical machine translation systems for almost twenty years.']
+u'E06-1011'
+[ u'This approach has been further developed in particular by Ryan McDonald and his colleagues and is now known as spanning tree parsing, because the problem of finding the most probable tree under this type of model is equivalent to finding an optimum spanning tree in a dense graph containing all possible dependency arcs.',
+  u'1 Introduction Higher-order dependency features encode more complex sub-parts of a dependency tree structure than first-order, bigram head-modifier relationships.1 The clear trend in dependency parsing has been that the addition of such higher-order features improves parse accuracy .',
+  u'The results on Chinese are obtained on two different data sets, Chinese Treebank 4.0 and Chinese Treebank 5.0 as noted.3 Table 1 shows that the results I am able to achieve on English are competitive with the state of the art, but are still behind the best results of .']
+u'H05-1044'
+[ u'Instead of document level sentiment classification, analyze the contextual polarity of phrases and incorporate many well designed features including dependency trees.',
+  u'2.3.4 Sentiment Expression Classification The final component uses two classifiers to identify words contained in phrases that express positive or negative sentiments .',
+  u'2 Related Work Previous work on polarity disambiguation has used contextual clues and reversal words .']
+u'H05-1066'
+[ u'This approach has been further developed in particular by Ryan McDonald and his colleagues and is now known as spanning tree parsing, because the problem of finding the most probable tree under this type of model is equivalent to finding an optimum spanning tree in a dense graph containing all possible dependency arcs.',
+  u'For example, setting ?1 = FIRST and ?t>1 = REST corresponds to first-order models, while setting ?1 = NULL and ?t>1 = xt?1 corresponds to sibling models .',
+  u'1 Introduction Syntactic parsing using dependency structures has become a standard technique in natural language processing with many different parsing models, in particular data-driven models that can be trained on syntactically annotated corpora .']
+u'H94-1020'
+[ u'7 Experiments We conducted two experiments on Penn Treebank II corpus .',
+  u'4 Experiments We applied our approaches to parsing errors given by the HPSG parser Enju, which was trained on the Penn Treebank section 2-21. for almost twenty years .',
+  u'part of speech information using the Penn tagset .']
+u'J01-4004'
+[ u'We started with the machine learning based 10 WordNet Wikipedia Prince Fela Kuti The Minneapolis Genius the pioneer of Afrobeat music The artist formerly known as Prince TAFKAP The Artist Raw text he Prince Fela Kuti the pioneer of Afrobeat music The Minneapolis Genius he TAFKAP The Artist The artist formerly known as Prince with coreference chains Text annotated Preprocessing pipeline PoS tagger Chunker NER Baseline Feature Extractor MaxEnt classifier Semantic Feature extractor SEMANTICS Figure 2: Overview of the coreference system for extrinsic evaluation of WordNet and Wikipedia relatedness measures.',
+  u'Unlike binary classification-based coreference systems where independent binary decisions are made about each pair  we use a log-linear model to select at most one antecedent for 2This dataset is identical to the English portion of the CoNLL 2012 data, except for the absence of a small pivot text.',
+  u'We construct this entity-mention graph by learning to decide for each mention which preceding mention, if any, belongs in the same equivalence class; this approach is commonly called the pairwise coreference model .']
+u'J02-3001'
+[ u'1 Introduction Semantic role labeling is the task of automatically classifying the arguments of a predicate with roles such as Agent, Patient or Location.',
+  u'Our goal with these categories was to produce data useful for automatically labeling semantic roles  where selectional preferences play an important role.',
+  u'3.10 Identifying Semantic Roles A semantic frame for an event such as judgement contains semantic roles such as judge, evaluee, and reason, whereas an event such as statement contains roles such as speaker, addressee, and message .']
+u'J03-1002'
+[ u'The word alignment between the source input and reference is computed using GIZA++ beforehand with the default settings, then is refined with the heuristic grow-diag-finaland; the word alignment between the source input and the translation is generated by the decoder with the help of word alignment inside each phrase pair.',
+  u'GIZA++ toolkit is used to perform word alignment in both directions with default settings, and the intersect-diag-grow method is used to generate symmetric word alignment refinement.',
+  u'By combining word alignments in two directions using heuristics  a single set of static word alignments was then formed.']
+u'J04-4002'
+[ u'First, we identify initial phrase pairs using the same criterion as most phrase-based systems  namely, there must be at least one word inside one phrase aligned to a word inside the other, but no word inside one phrase can be aligned to a word outside the other phrase.',
+  u'3.2 Word Boundary-aware Phrase Extraction The core translation structure of a phrase-based SMT model is the phrase table, which is learned from a bilingual parallel sentence-aligned corpus, typically using the alignment template approach .',
+  u'An aligned phrase pair is consistent with the word alignment if neither phrase contains any word aligning to a word outside the other phrase .']
+u'J05-1004'
+[ u'2.2 Semantic Role Labeling The task of semantic role labeling in the context of PropBank is to label tree nodes with semantic roles in a syntactic parse tree.',
+  u'2 Semantic Role Features for Machine Translation 2.1 Defining Semantic Roles There are two semantic standards with publicly available training data: PropBank .',
+  u'The semantic roles in the examples are labeled in the style of PropBank  a broadcoverage human-annotated corpus of semantic roles and their syntactic realizations.']
+u'J90-2002'
+[ u'presented a noisychannel approach in which they adapted the IBM model 4 from statistical machine translation .',
+  u'1 Introduction Parallel corpora consisting of text in parallel translation plays an important role in data-driven natural language processing technologies such as statistical machine translation .',
+  u'} This decomposition into two knowledge sources is known as the source-channel approach to statistical machine translation .']
+u'J91-1002'
+[ u'In 1The term spatiM cohesion is motivated by the work on lexical cohesion by Morris and Hirst (.',
+  u"4.3 Lexical Chains Morris and Hirst's pioneering work on computing discourse structure from lexical relations is a precursor to the work reported on here.",
+  u'She tests the hypothesis that term repetition is a primary feature of textual cohesion by using it as the basis for two different algorithms for identifying multiparagraph subtopical units.']
+u'J92-4003'
+[ u'3.1 Brown clustering The Brown algorithm is a hierarchical clustering algorithm which clusters words to maximize the mutual information of bigrams .anoop}@cs.sfu.ca Abstract We combine multiple word representations based on semantic clusters extracted from the .',
+  u'First, hierarchical word clusters are derived from unlabeled data using the Brown et al clustering algorithm .',
+  u'To create the word clusters, we employ Brown clustering, a hierarchical clustering algorithm proposed by .']
+u'J93-1003'
+[ u'64 Table 1: Subjects of &amp;quot;employ&amp;quot; with highest likelihood ratio word freq logA word freq logA bRG 64 50.4 plant 14 31.0 company 27 28.6 operation 8 23.0 industry 9 14.6 firm 8 13.5 pirate 2 12.1 unit 9 9.32 shift 3 8.48 postal service 2 7.73 machine 3 6.56 corporation 3 6.47 manufacturer 3 6.21 insurance company 2 6.06 aerospace 2 5.81 memory device 1 5.79 department 3 5.55 foreign office 1 5.41 enterprise 2 5.39 pilot 2 5.37 *ORG includes all proper names recognized as organizations The logA column are their likelihood ratios .',
+  u'We then measured the association of that word with every other open-class word that appeared in an utterance with that word using the log likelihood ratio .',
+  u'For this present work, we use Dunning?s log-likelihood ratio statistics defined as follows: sim = a log a+ b log b+ c log c+ d log d .']
+u'J93-2003'
+[ u'Syntax-light alignment models such as the five IBM models and their relatives have proved to be very successful and robust at producing word-level alignments, especially for closely related languages with similar word order and mostly local reorderings, which can be captured via simple models of relative word distortion.',
+  u'1 Introduction The IBM and HMM word alignment models have underpinned the majority of statistical machine translation systems for almost twenty years.',
+  u'The first and the most important problem 3The IBM models  e. Previous work has used statistical machine translation models like IBM Model 1 as a method for initially determining which words should be associated with which database symbols.']
+u'J93-2004'
+[ u'We have chosen to work with a corpus with parse information, the Wall Street Journal WSJ part of the Penn Treebank II corpus  and to extract chunk information from the parse trees in this corpus.',
+  u'The third corpus was Section 23 of the Wall Street Journal data in the Penn Treebank .',
+  u'4 Experiments The experiments described here were conducted using the Wall Street Journal Penn Treebank corpus .']
+u'J94-2001'
+[ u'Eojeol 86.80 90.48 89.40 89.62 91.73 92.48 Morpheme 91.32 94.93 94.40 94.48 95.77 96.12 possible for training gives much better performance than unsupervised training using the Baum-Welch reestimation algorithm .',
+  u'EM was first used in POS tagging in which showed that except in conditions where there are no labeled training data at all, EM performs very poorly.',
+  u' In the second one, the model is learned using the Baunl-\\?elch algorithm from an initial model which is estimated using labelled corpora .']
+u'J95-2003'
+[ u'The model is motivated by Centering Theory  which states that subsequent sentences in a locally coherent text are likely to continue to focus on the same entities as in previous sentences.',
+  u'According to the theory of Centering  the salience of an entity in a discourse is reflected by linguistic factors such as choice of referring expression and syntactic form.',
+  u'However, such approaches tend to disregard theoretical findings from discourse theories, such as Centering Theory .']
+u'J96-1002'
+[ u'As a model learning method, we adopt the maximum entropy model learning method .',
+  u'3 Implementation 3.1 Pronoun resolution model We built a machine learning based pronoun resolution engine using a Maximum Entropy ranker model  similar with Denis and Baldridge.',
+  u'4 Method 4.1 Classifier We use a Maximum Entropy classifier trained using a large number of boolean features.']
+u'J96-2004'
+[ u'5 Reliability of Annotations 5.1 The Kappa Statistic To measure the reliability of annotations we used the Kappa statistic .',
+  u'4.2 Interpreting reliability results It has been argued elsewhere that since the amount of agreement one would expect by chance depends on the number and relative frequencies of the categories under test, reliability for category classifications should be measured using the kappa coefficient.',
+  u'After each step the annotations were compared using the ~ statistic as reliability measure for all classification tasks .']
+u'J97-3002'
+[ u'Since many concepts are expressed by idiomatic multiword expressions instead of single words, and different languages may realize the same concept using different numbers of words  word alignment based methods, which are highly dependent on the probability information at the lexical level, are not well suited for this type of translation.',
+  u'There are other approaches to statistical machine translation where translation is achieved through transduction of source language structure to target language structure .',
+  u'We present a new method that exploits a novel application of Inversion Transduction Grammar or ITG expressiveness constraints for mining monolingual data to obtain tight sentence translation pairs, yielding accuracy significantly higher than previous known methods.']
+u'N03-1003'
+[ u'Some works focused on learning rules from comparable corpora, containing comparable documents such as different news articles from the same date on the same topic .',
+  u'2 Related Work Automatic Paraphrasing and Entailment Our work is closely related to research in automatic paraphrasing, in particular, to sentence level paraphrasing .',
+  u'This is related to the wellstudied problem of identifying paraphrases and the more general variant of recognizing textual entailment, which explores whether information expressed in a hypothesis can be inferred from a given premise.']
+u'N03-1017'
+[ u'A standard phrasal SMT system serves as our testbed, using a conventional set of models: phrasal mod408 els of source given target and target given source; lexical weighting models in both directions, language model, word count, phrase count, distortion penalty, and a lexicalized reordering model.',
+  u'The prior probability P 0 is the prior distribution for the phrase probability which is estimated using the phrase normalized counts commonly used in conventional Phrase?based SMT systems, e.g., .',
+  u'2 Word Class Models 2.1 Standard Models The translation model of most phrase-based and hierarchical phrase-based SMT systems is parameterized by two phrasal and two lexical channel models which are estimated as relative frequencies.']
+u'N03-1020'
+[ u' Another approach that is used for summarization evaluation is to use the ROUGE evaluation approach  which is based on n-gram co-occurrence, longest common subsequence and weighted longest common subsequence between the ideal summary and the extracted summary.',
+  u'For evaluation, we are using the ROUGE evaluation toolkit1, which is a method based on Ngram statistics, found to be highly correlated with human evaluations .',
+  u'For evaluation, we are using the ROUGE evaluation toolkit, which is a method based on Ngram statistics, found to be highly correlated with human evaluations .']
+u'N03-1028'
+[ u'2 Conditional Random Fields We use a Conditional Random Field since it represents the state of the art in sequence modeling and has also been very effective at Named Entity Recognition.',
+  u'Since the CRF model is one of the most successful models in sequential labeling tasks  in this paper, we choosed CRFs as a baseline model for the comparison.',
+  u'Similar results were obtained using Conditional Random Fields on similar features .']
+u'N03-1033'
+[ u'We then obtain their POS N-grams from the Stanford POS tagger  and count how many of them have the POS N-gram p. To make use of the information about future tags, Toutanova et al proposed a tagging algorithm based on bidirectional dependency networks 467 and achieved the best accuracy on POS tagging on the Wall Street Journal corpus.',
+  u'The 250 rare POS bigrams were extracted from the Brown Corpus using the POS tagger in .',
+  u'We used the Stanford POS tagger, using Stanford CoreNLP, to assign POS tags to queries .']
+u'N07-1051'
+[ u'To obtain syntactic parse trees for instantiating syntactic constraints and predicate-argument structures for integrating the PAS reordering model, we first parse the source sentences with the Berkeley Parser trained on Chinese TreeBank 6.',
+  u'Syntactic Category Refinement Our work also relates to work in syntactic category refinement in which POS categories and parse tree non-terminals are refined in order to improve parsing performance .',
+  u'Syntactic features: We obtain the syntactic parsing tree using the Berkeley Parser .']
+u'P00-1056'
+[ u'In order to alleviate the effect of word alignment errors, we base the projection on the alignment matrix, a compact representation of multiple GIZA++ results, rather than a single word alignment in previous dependency projection works.',
+  u'3 The Alignment Challenge The first challenge was word alignment: given a parallel text, students were challenged to produce wordto-word alignments with low alignment error rate .',
+  u'3.1 Word alignment quality In order to directly measure the influence of the added cognate information on the word alignment quality, we performed a single experiment using a set of 500 manually aligned sentences from Hansards .']
+u'P01-1067'
+[ u'As syntactic information has been widely used in machine translation systems  an interesting question is to predict whether or not a syntactic constituent is projectable1 across a language pair.',
+  u'This is quite different from the various approaches to incorporating syntactic knowledge into machine translation systems, wherein strong assumptions about the possible syntactic operations are made .',
+  u'Mainly dedicated to machine translation, purely statistical systems have gradually been enriched with syntactic knowledge .']
+u'P02-1014'
+[ u'5 Related work In recent years there has been a lot of work to develop anaphora resolution algorithms using both symbolic and statistical methods that could be quantitatively evaluated but this work focused on identity relations; bridging references were explicitly excluded from the MUC coreference task because of the problems with reliability discussed earlier.',
+  u'Although many existing machine learning approaches to coreference resolution have performed reasonably well without explicit anaphoricity determination  anaphoricity determination has been studied fairly extensively in the literature, given the potential usefulness of NP anaphoricity in coreference resolution.',
+  u'1 Introduction The last years have seen a boost of work devoted to the development of machine learning based coreference resolution systems .']
+u'P02-1038'
+[ u'4.1 Baseline For a baseline system we produced a phrase-based statistical machine translation system based on the log-linear formulation described in e. machine translation .',
+  u'NP q x1 q x2 Figure 2: Example of a T rule 4 SMT Model The systems will be implemented using a discriminative, log-linear model  using the language and translation models as feature functions.',
+  u'2.4 Baseline Translation System To translate the input documents into English we use phrase-based statistical machine translation systems based on the log-linear formulation of the problem .']
+u'P02-1040'
+[ u'This is confirmed by the translation experiments in which the evaluation data sets were translated using the servers translation engines and the translation quality was evaluated using the standard automatic evaluation metrics BLEU .',
+  u'This is confirmed by the translation experiments in which the evaluation data sets were translated using the servers translation engines and the translation quality was evaluated using the standard automatic evaluation metrics BLEU .',
+  u'3.3 BLEU Score The BLEU score measures the agreement between a hypothesis eI1 generated by the MT system and a reference translation e. The quality of phrase translation is typically measured using n-gram precision based metrics such as BLEU and NIST scores.']
+u'P02-1053'
+[ u' 2 Previous work on Sentiment Analysis Some prior studies on sentiment analysis focused on the document-level classification of sentiment where a document is assumed to have only a single sentiment, thus these studies are not applicable to our goal.',
+  u'Semantic orientation classification is a task of determining positive or negative sentiment of words .',
+  u'There exist two main approaches to the problem of extracting sentiment automatically.1 The lexicon-based approach involves calculating orientation for a document from the semantic orientation of words or phrases in the document .']
+u'P03-1021'
+[ u'Decoding weights are optimized using Och?s algorithm to set weights for the four components of the loglinear model: language model, phrase translation model, distortion model, and word-length feature..2 The parameters of the MT System were optimized for BLEU metric on NIST MTEval?2002 test sets using minimum error rate training .',
+  u'We use minimum error rate training to tune the feature weights of HPB for maximum BLEU score on the development set with serval groups of different start weights..1 1We also experimented with the MERT algorithm .',
+  u'2 Statistical Machine Translation We use a log-linear approach in which a foreign language sentence f is translated into another language, for example English, e, by seeking a maximum solution: e. 16 32.51 0.93 33.62 0.94 [+0.62, +1.59] 35.00 0.94 3.2 Non-Uniform System Prior Weights As pointed out in Section 2.1, a useful property of the MBR-like system selection method is that system prior weights can easily be trained using the Minimum Error Rate Training .']
+u'P03-1054'
+[ u'To generate the features for each of the mention pairs a proprietary JDPA Tokenizer is used for parsing the document and the Stanford Parser is used to generate parse trees and part of speech tags for the sentences in the documents.',
+  u'For the English WSJ, high accuracy parsing models have been created, some of them using extensions to classical PCFG parsing such as lexicalization and markovization .',
+  u'We parse input sentences to phrase structure trees using the Stanford parser  a statistical syntactic parser trained on the Penn TreeBank.']
+u'P04-1035'
+[ u'Secondly, we show that fine-grained opinion structural information can even be used to build features that improve a coarse-grained sentiment task: document polarity classification of reviews .',
+  u'such as opinion mining ..3 Subj: The subjectivity dataset with subjective reviews and objective plot summaries .',
+  u'7.1 Experiment Setting Our work is motivated by the work of  which only used subjective sentences for document-level sentiment classification, instead of using all sentences.']
+u'P04-1054'
+[ u'Recent work on relation extraction has shown that supervised machine learning coupled with intelligent feature engineering or kernel design provides state-of-the-art solutions to the problem .',
+  u'Recent work on relation extraction has shown that supervised machine learning coupled with intelligent feature engineering or kernel design provides state-of-the-art solutions to the problem .',
+  u'Prior works on relation recognition have focused on syntactic features, e.g., parsing trees  and on lexical features, e. one can obtain results superior to feature-based methods .']
+u'P05-1012'
+[ u'1 Introduction Dependency-based syntactic parsing has become a widely used technique in natural language processing, and many different parsing models have been proposed in recent years .',
+  u'1 Introduction Syntactic parsing using dependency structures has become a standard technique in natural language processing with many different parsing models, in particular data-driven models that can be trained on syntactically annotated corpora .',
+  u'1 Introduction In recent years, several dependency parsing algorithms have been proposed and achieved high parsing accuracies on several treebanks of different languages.']
+u'P05-1033'
+[ u'The proposed composite language models are applied to the task of re-ranking the N-best list from Hiero  a state-of-the-art parsing-based machine translation system; we achieve significantly better translation quality measured by the Bleu score and .',
+  u'1 Introduction Hierarchical phrase-based translation has emerged as one of the dominant current approaches to statistical machine translation.',
+  u'1 Introduction Hierarchical phrase-based translation generates translation hypotheses via the application of hierarchical rules in CYK parsing .']
+u'P05-1034'
+[ u'2.1 Dependency Orientation Based on the assumption that constituents generally move as a whole  we decompose the sentence reordering probability into the reordering probability for each aligned source word with respect to its head, excluding the root word at the top of the dependency hierarchy which does not have a head word.',
+  u'3 Relaxed-well-formed Dependency Structure Dependency models have recently gained considerable interest in SMT .',
+  u'Dependency models have recently gained considerable interest in many NLP applications, including machine translation .']
+u'P05-1045'
+[ u'2 Entity Type Classification Systems State-of-the-art tools for named entity recognition such as the Stanford NER Tagger .',
+  u'We first extract named entities from scattered opinions DT using Stanford Named Entity Recognizer .',
+  u'5.1.1 Data preprocessing We preprocess our textual data as follows: We first use the Stanford named entity recognizer to find entity mentions in the corpus.']
+u'P05-1066'
+[ u'are statistically significant with p &lt; 0.05 using the sign test described in  compared to the baseline results in each table.',
+  u'In particular, we use a system of source-side reordering rules which, given a parse of the source sentence, will reorder the sentence into a target-side order .',
+  u'The absolute improvements of 1.0 BLEU points on average over 1-best alignments are statistically significant at p &lt; 0.01 using sign-test ']
+u'P05-1074'
+[ u'In order to produce paraphrases, a promising approach is to see the paraphrase generation problem as a translation problem, where the target language is the same as the source language .',
+  u'1168 Abundantly available bilingual parallel corpora have been shown to address both these issues, obtaining paraphrases via a pivoting step over foreign language phrases .',
+  u'In an attempt to address this problem, a great deal of recent research has focused on identifying, generating, and harvesting phrase- and sentence-level paraphrases Many data-driven approaches to the paraphrase problem have been proposed.']
+u'P06-1121'
+[ u'2 Related Work To model the syntactic transformation process, researchers in these fields?especially in machine translation?have developed powerful grammatical formalisms and statistical models for representing and learning these tree-to-tree relations .',
+  u'The goal of integrating syntactic information into the translation model has prompted many researchers to pursue tree-based transfer models  with increasingly encouraging results.',
+  u'1 Introduction Recent several years have witnessed the rapid development of syntax-based translation models  which incorporate formal or linguistic syntax into translation process.']
+u'P07-2045'
+[ u'4.2 Machine Translation The phrase-based translation experiments reported in this work was performed using the Moses2 toolkit for statistical machine translation.',
+  u'5 SMT System To obtain machine-generated translation hypotheses for our error detection, we use a state-of-the-art phrase-based machine translation system MOSES .',
+  u'While pre-ordering is not able to consider both translation and reordering in a joint model, it is useful in that it is done before the actual translation process, so it can be performed with a conventional translation pipeline using a standard phrase-based decoder such as Moses .']
+u'P93-1024'
+[ u'Distributional clustering assigns to each word a probability distribution over clusters to which it may belong, and characterizes each cluster by a centroid, which is an average of cooccurrence distributions of words weighted according to cluster membership robabilities.',
+  u'Semantic Groups &amp; Topic Tree There are many methods that attempt to construct the conceptual representation of a topic from the original data set .',
+  u'Class based models distinguish between unobserved cooccurrences using classes of &amp;quot;similar&amp;quot; words.']
+u'P95-1026'
+[ u'Another related area to this work is the field of word sense induction: the task of identifying the possible senses of a word in a corpus using unsupervised methods  as opposed to traditional disambiguation methods which rely on the availability of a finite and static list of possible meanings.',
+  u'Constraining learning by using document boundaries has been used quite effectively in unsupervised word sense disambiguation .',
+  u'Inspired by Yarowsky?s one sense per discourse heuristic for word sense disambiguation  we make the assumption that multiple instances of a word in the same discourse will nearly always correspond to the same semantic class.']
+u'P95-1037'
+[ u'The input to our sentence realiser are bag of words with dependency constraints which are automatically extracted from the Penn treebank using head percolation rules used in  which do not contain any order information.',
+  u'History-based models for predicting the next parser action 3. led to a significant leap in the performance of statistical parsing for English .',
+  u'1 Introduction Many state-of-the-art parsers work with lexicalized parsing models that utilize the information and statistics of word tokens .']
+u'P96-1025'
+[ u'On the other hand, as large-scale tagged corpora have become available these days, a number of statistical parsing techniques which estimate the dependency probabilities using such tagged corpora have been developed.',
+  u'A major difference between our approach and most other models tested on the WSJ is that the DOP model uses frontier lexicalization while most other models use constituent lexicalization .',
+  u'However, in order to utilize some syntax information between the pair of words, we adopt the syntactic distance representation of  named Collins distance for convenience.']
+u'P96-1041'
+[ u'The language model is a statistical 4-gram model estimated with Modified Kneser-Ney smoothing using only English sentences in the parallel training data.',
+  u'uses the SRI Language Modeling Toolkit to train language model with modified Kneser-Ney smoothing .',
+  u'The language model was a trigram model with modified Kneser-Ney smoothing .']
+u'P97-1023'
+[ u'1 Introduction In recent years, sentiment analysis, which mines opinions from information sources such as news, blogs and product reviews, has drawn much attention in the NLP field .',
+  u'1 Introduction In recent years, sentiment analysis, which mines opinions from information sources such as news, blogs, and product reviews, has drawn much attention in the NLP field .',
+  u'Closer to our work is the large body of work on the automatic, context-independent classification of words according to their polarity, i.e as positive or negative .']
+u'P98-1013'
+[ u'Therefore, for a better coverage of semantic features, we also employ the semantic annotations encoded in the FrameNet corpus .',
+  u'1 Introduction The availability of large scale semantic lexicons, such as FrameNet  allowed the adoption of a wide family of learning paradigms in the automation of semantic parsing.',
+  u'PropBank is organized in two layers, the first one being an underspecified representation of a sentence with numbered arguments, the second one containing fine-grained information about the semantic frames for the predicate comparable to FrameNet .']
+u'P98-2127'
+[ u'We also implemented a method based on distributional similarity: Using Lin?s proximity-based thesaurus trained on our in-house essay data as well as on wellformed newswire texts, we took all words with the proximity score &amp;gt; 1.',
+  u'5.2 Lexical Clustering In order to address the sparse coverage of lexical head word statistics, an experiment was carried out using an automatic clustering of head words of the type described in .',
+  u'which acquires predominant senses for target words from a large sample of text using distributional similarity .']
+u'P99-1067'
+[ u'Previous work has sought to learn new translations for words by looking at comparable, but not parallel, corpora in multiple languages and analyzing the cooccurrence of words, resulting in the generation of new word-to-word translations.',
+  u'Comparable documents can also be used for learning word-level translation lexicons .',
+  u'Related Work While there is a large body of work on bilingual comparable corpora, most of it is focused on learning word translations .']
+u'W02-1001'
+[ u'8.1 The Averaged Perceptron Algorithm with Separating Plane The averaged perceptron algorithm .',
+  u'2 Structured Perceptron for Inexact Hypergraph Search The structured perceptron algorithm is a general learning algorithm.',
+  u'To train the model, we use the averaged perceptron algorithm .']
+u'W02-1011'
+[ u'1 Introduction Sentiment classification is a special task of text classification whose objective is to classify a text according to the sentimental polarities of opinions it contains  e. Machine learning techniques have been proposed for sentiment classification based on annotated samples from experts, but they have limited 1A feature broadly means an attribute or a function of a service.',
+  u'and treated the text-level opinion mining as a classification of either positive or negative on the number of positive or negative opinion words in one text .',
+  u' 2 Previous work on Sentiment Analysis Some prior studies on sentiment analysis focused on the document-level classification of sentiment where a document is assumed to have only a single sentiment, thus these studies are not applicable to our goal.']
+u'W04-1013'
+[ u'We also used the automatic evaluation metric ROUGE as a rough estimate of summary recall: this metric computes the percentage of n-grams in the reference text that appeared in the generated summaries.',
+  u'For the extractive or abstractive summaries, we use ROUGE scores  a metric used to evaluate automatic summarization performance, to measure the pairwise agreement of summaries from different annotators.',
+  u'1 Introduction The most commonly used evaluation method for summarization during system development and for reporting results in publications is the automatic evaluation metric ROUGE .']
+u'W04-3250'
+[ u'To compare the relative quality of different metrics, we apply bootstrapping re-sampling on the data, and then use paired t-test to determine the statistical significance of the correlation differences .. Statistical significance in BLEU score differences was tested by paired bootstrap re-sampling .',
+  u'The improvement is statistically significant with 95% confidence using pairwise bootstrapping of 1,000 test sets randomly sampled with replacement .-word 17.47 / 63.18 / 37.79 13.12 / 59.27 / 27.09 31.66 / 69.61 / 51.98 20.26 / 28.34 / 38.34 GIZA-char 06.17 / 41.04 / 19.90 04.58 / 35.09 / 11.76 10.31 / 42.84 / 25.06 01.48 / 00.72 / 06.67 ITG-char 15.35 / 61.95 / 35.45 12.14 / 59.02 / 25.31 27.74 / 67.44 / 48.56 17.90 / 28.46 / 35.71 Table 2: Translation results in word-based BLEU, character-based BLEU, and METEOR for the GIZA++ and phrasal ITG models for word and character-based translation, with bold numbers indicating a statistically insignificant difference from the best system according to the bootstrap resampling method at p = 0.05 .',
+  u'We test the statistical significance of differences between various MT systems using the bootstrap resampling method .']
+u'W05-0909'
+[ u'Though we could have used a further downstream measure like BLEU, METEOR has also been shown to directly correlate with translation quality and is simpler to measure.',
+  u'2 The METEOR-NEXT Metric 2.1 Traditional METEOR Scoring Given a machine translation hypothesis and a reference translation, the traditional METEOR metric calculates a lexical similarity score based on a wordto-word alignment between the two strings .',
+  u'This measure is closely related to the BLEU-1 evaluation metric and the Meteor .']
+u'W06-2920'
+[ u'This is also the choice implicitly assumed in the CoNLL data format, used in the CoNLL shared tasks on dependency parsing in 2006 and 2007 and the current de facto standard for exchange of dependency annotated data.',
+  u'Some support for this view can be found in the results from the CoNLL shared tasks on dependency parsing in 2006 and 2007, where a variety of data-driven methods for dependency parsing have been applied with encouraging results to languages of great typological diversity .',
+  u'5 Data and experimental setup We evaluate all constraints and measures described in the previous section on 12 languages, whose treebanks were made available in the CoNLL-X shared Figure 3: Sample non-projective tree considered planar in empirical evaluation task on dependency parsing .']
+u'W95-0107'
+[ u'3.1 Word Sequence Classification Similar to English text chunking  the word sequence classification model aims to classify each word via encoding its context features.',
+  u'For extracting simple noun phrases we first used Ramshaw and Marcus?s base NP chunker .',
+  u'4.2 A Character-based Tagger With IOB2 representation  the problem of joint segmentation and tagging can be regarded as a character classification task.']
+u'W96-0213'
+[ u'We used the MXPOST tagger trained on training data to assign POS tags and used the first-order Parsert to process the sentences of the BLLIP corpus.',
+  u'English POS tags were assigned by MXPOST  which was trained on the training data described in Section 4. we used the MXPOST .',
+  u'We train each parser for 10 iterations and select pa9For Czech, the PDT provides automatic tags; for English, we used MXPOST to tag validation and test data, with 10-fold cross-validation on the training set.']
+u'W99-0604'
+[ u'2.1 Phrase Based MT Phrase-based methods identify contiguous bilingual phrase pairs based on automatically generated word alignments .',
+  u'For the English/German sentence and single-word based alignments, we plan to use statistical models [3] which generate both sentence and word alignments.',
+  u'1 Introduction Possibly the most remarkable evolution of recent years in statistical machine translation is the step from word-based models to phrase-based models .']
+u'W99-0613'
+[ u'Therefore, an increasing attention has been recently given to semi-supervised learning, where large amounts of unlabeled data are used to improve the models learned from a small training set .',
+  u'Unsupervised learning approaches do not require labelled training data - training requires only very few seed lists and large unannotated corpora .',
+  u'The problem of gathering sufficient reliable information from a small initial set of seed resources has been tackled in bootstrapping research for information extraction .']
