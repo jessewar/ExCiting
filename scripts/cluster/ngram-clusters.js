@@ -11,40 +11,52 @@ var extractionCollection = server.db("mongodata").getCollection("re_sentence_ext
 var total_extractions = extractionCollection.count();
 var papers_above_threshold = fs.readFileSync("./papers_above_threshold.txt", "utf8").split("\n");
 papers_above_threshold.forEach(function(paper_id) {
-  var result = {cited_paper: paper_id,
-                bigrams: []};
-  var bigram_counts = {};
   var extraction_docs = extractionCollection.find({cited_paper:paper_id}).toArray();
+  var bigram_counts = getNgramCountObject(extraction_docs, 2);
+  var trigram_counts = getNgramCountObject(extraction_docs, 3);
+  // calculate tf-idf
+  var result = {cited_paper: paper_id,
+                bigrams: getNgramData(bigram_counts),
+		trigrams: getNgramData(trigram_counts)};
+  printResult(result, "trigrams");
+});
+
+function getNgramData(ngram_counts) {
+  var ngrams = [];
+  for (var ngram in ngram_counts) {
+    var tf = ngram_counts[ngram];
+    var idf = math.log((total_extractions / ngram_totals[ngram]), 10);
+    ngrams.push({ngram: ngram, tfidf: tf * idf, tf: tf, idf: idf});
+  }
+  return ngrams;
+}
+
+// returns an object mapping the ngrams contained within a list of documents to their frequency within the documents
+function getNgramCountObject(extraction_docs, n) {
+  var ngram_counts = {};
   extraction_docs.forEach(function(extraction_doc) {
     if (extraction_doc.extraction !== undefined) {
       var extraction = extraction_doc.extraction.toLowerCase();
-      var bigrams = NGrams.ngrams(extraction, 2);
-      // populate bigram counts for current paper
-      bigrams.forEach(function(bigram) {
-        if (!bigram_counts[bigram]) {
-          bigram_counts[bigram] = 1;
+      var ngrams = NGrams.ngrams(extraction, n);
+      ngrams.forEach(function(ngram) {
+        if (!ngram_counts[ngram]) {
+          ngram_counts[ngram] = 1;
         } else {
-          bigram_counts[bigram] = bigram_counts[bigram] + 1;
+          ngram_counts[ngram] = ngram_counts[ngram] + 1;
         }
       });
     }
   });
-  // calculate tf-idf
-  for (var bigram in bigram_counts) {
-    var tf = bigram_counts[bigram];
-    var idf = math.log((total_extractions / ngram_totals[bigram]), 10);
-    result.bigrams.push({bigram: bigram, tfidf: tf * idf, tf: tf, idf: idf});
-  }
-  printResult(result);
-});
+  return ngram_counts;
+}
 
-function printResult(result) {
-  var bigrams = result.bigrams;
-  bigrams.sort(function(bigram1, bigram2) {
-    return bigram2.tfidf - bigram1.tfidf;
+function printResult(result, ngrams) {
+  var ngrams = result[ngrams];
+  ngrams.sort(function(ngram1, ngram2) {
+    return ngram2.tfidf - ngram1.tfidf;
   });
   for (var i = 0; i < 3; i++) {
-    console.log(bigrams[i]);
+    console.log(ngrams[i]);
   }
   console.log("--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------");
 }
