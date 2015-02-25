@@ -32,7 +32,7 @@ function getNgramData(ngram_counts) {
   ngrams.sort(function(ngram1, ngram2) {
     return ngram2.tfidf - ngram1.tfidf;
   });
-  return ngrams;
+  return ngrams.slice(0, 5);
 }
 
 // returns an object mapping the ngrams contained within a list of documents to their frequency within the documents
