@@ -1,0 +1,10 @@
+#OSX Junk
+*.DS_Store
+
+output/
+data/
+annotation-data-store/
+
+
+# Compiled python files should not be included
+*.pyc
