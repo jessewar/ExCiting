@@ -1,9 +1,8 @@
-#OSX Junk
+# OSX Junk
 *.DS_Store
 
 output/
 data/repo-exclude/
-annotation-data-store/
 
 
 # Compiled python files should not be included
