@@ -57,3 +57,9 @@ class aan_importer:
         mappings[paper_id].append(split_line[1])
 
     return mappings
+
+  '''
+  Returns fulltext for that paper_id
+  '''
+  def fulltext_for_paper_id(self, paper_id):
+    

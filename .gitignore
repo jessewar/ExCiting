@@ -2,7 +2,7 @@
 *.DS_Store
 
 output/
-data/
+data/repo-exclude/
 annotation-data-store/
 
 
