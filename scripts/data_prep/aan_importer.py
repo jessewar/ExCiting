@@ -1,3 +1,4 @@
+import os.path
 class aan_importer:
 
   '''
@@ -62,4 +63,17 @@ class aan_importer:
   Returns fulltext for that paper_id
   '''
   def fulltext_for_paper_id(self, paper_id):
+    path = self.aan_release_path.split( "/release/")[0] + "/papers_text/" + paper_id + ".txt"
+
+    fulltext = ""
+    if os.path.isfile(path):
+      with open(path, 'r') as f:
+        fulltext = f.read()
+
+    return fulltext
     
+
+
+
+
+
