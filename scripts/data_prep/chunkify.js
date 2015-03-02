@@ -1,78 +1,128 @@
-var fs = require("fs");
-var xpath = require("xpath");
-var dom = require("xmldom").DOMParser;
-var MongoClient = require("mongodb");
+// Takes ParsCit output (XML files), extracts the individual chunks
+// and populates the DB with them
+
+var fs = require('fs');
+var xpath = require('xpath');
+var dom = require('xmldom').DOMParser;
+var MongoClient = require('mongodb');
+var path = require('path');
+
+// file containing the paper IDs of the papers we performed extractions on
+var paperIDs = '../../data/uw_papers.txt';
+
+// file containing a mapping from paper ID to paper title for the papers in
+// our corpus and the associated delimeter
+var paperIDsToTitles = '/Users/trevor/School/454/aan/release/2013/paper_ids.txt';
+var paperTitleDelimiter = '\t';
 
 // Build map of paper_title -> paper_id
-var title_to_id = {};
-populateTitleToIdMap();
+var titleToID = {};
+populateTitleToIdMap(paperIDs, paperIDsToTitles, paperTitleDelimiter);
 
-var dbPath = "mongodb://localhost/exciting";
+// Directory of chunks
+var chunkDir = '/Users/trevor/School/454/ExCiting/data/uw_paper_subset/chunks';
+
+// MongoDB db path, and collection to store chunks in
+var dbPath = 'mongodb://localhost/exciting';
+var chunkColName = 'uw_chunks';
+
 MongoClient.connect(dbPath, function(err, db) {
-  var chunkCollection = db.collection("chunks");
-  var parsed_paper_directory = fs.readdirSync("/home/jesse/Classes/CSE454/ExCiting/data/paper_subset/chunks");
-  parsed_paper_directory.forEach(function(parsed_paper) {
+  if (err) {
+    console.log(err);
+    process.exit(1);
+  }
+
+  var chunkCol = getOrCreateCollection(db, chunkColName);
+  if (chunkCol === undefined) {
+    console.error('could not find or create collection', chunkColName);
+    process.exit(1);
+  }
+
+  chunks = [];
+
+  var parsedPaperDir = fs.readdirSync(chunkDir);
+  parsedPaperDir.forEach(function(parsedPaper) {
     // form xml
-    var parsed_paper_contents = fs.readFileSync("/home/jesse/Classes/CSE454/ExCiting/data/paper_subset/chunks/" + parsed_paper, "utf8");
-    var xml = new dom().parseFromString(parsed_paper_contents);
-    if (xml != undefined) {
+    console.log('parsing', parsedPaper);
+    var parsedPaperContents = fs.readFileSync(path.join(chunkDir, parsedPaper), 'utf8');
+    var xml = new dom().parseFromString(parsedPaperContents);
+    if (xml !== undefined) {
       // get paper related data
-      var paper_id = parsed_paper.substring(0, parsed_paper.indexOf("."));
-      var paper_title = xpath.select("//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()", xml).toString();
+      var citerPaperId = parsedPaper.substring(0, parsedPaper.indexOf('.'));
+      var paperTitle = xpath.select('//title[@confidence][not(./@confidence < //title/@confidence)][1]/text()', xml).toString();
 
       // get chunk related data
-      var citer_paper_id = paper_id;
-      var citations = xpath.select("//citation", xml);
+      var citations = xpath.select('//citation', xml);
       for (var i = 0; i < citations.length; i++) {
-      	var cited_paper_id = getPaperId(xpath.select("title/text()[1]", citations[i]).toString());
-      	var chunk_text = xpath.select("contexts/context[1]/text()", citations[i]).toString();  // we only use the first reference to this paper if it is cited multiple time
-      	var citation_text = xpath.select("contexts/context[1]/@citStr", citations[i]).toString().split('"')[1];
-      	if (cited_paper_id != undefined && chunk_text != undefined) {  // paper must be within corpus and be cited in a valid chunk
-          var chunk = {"citer_paper" : citer_paper_id,
-                       "cited_paper" : cited_paper_id,
-                       "text" : chunk_text,
-                       "citation_text" : citation_text};
-          chunkCollection.insert(chunk, function(err, result) {
-            if (err) { console.log(err); }
-          });
-	}
+      	var citedPaperID = getPaperId(xpath.select('title/text()[1]', citations[i]).toString());
+
+        // we only use the first reference to this paper if it is cited multiple time
+      	var chunkText = xpath.select('contexts/context[1]/text()', citations[i]).toString();
+      	var citationText = xpath.select('contexts/context[1]/@citStr', citations[i]).toString().split('"')[1];
+
+        // paper must be within corpus and be cited in a valid chunk
+      	if (citedPaperID !== undefined && 
+            chunkText !== undefined && 
+            chunkText.length !== 0 &&
+            citationText.length !== 0) {
+          chunks.push({'citer_paper' : citerPaperId,
+                       'cited_paper' : citedPaperID,
+                       'text' : chunkText,
+                       'citation_text' : citationText});
+        }
       }
     }
   });
+
+  var inserted = 0;
+
+  // someday we can do this as a bulk insert
+  chunks.forEach(function(chunk) {
+    chunkCol.insert(chunk, {w:1}, function(err, res) {
+      if (!err) {
+        inserted += 1;
+      }
+    });
+  });
+
+  console.log('inserted', inserted , 'chunks into', chunkColName);
   db.close();
 });
 
-function populateTitleToIdMap() {
-  var paper_id_subset = fs.readFileSync("papers_above_threshold.txt", "utf8").split("\n");
-  var paper_id_and_title = fs.readFileSync("paper_ids.txt", "utf8").split("\n");
-  for (var i = 0; i < paper_id_and_title.length; i++) {
-    var tokens = paper_id_and_title[i].split("\t");
+// Populate the mapping from paperID to the title from the specified
+// input files and delimeter
+function populateTitleToIdMap(paperIDFile, idToTitleFile, delimeter) {
+  var paperIDSubset = fs.readFileSync(paperIDFile, 'utf8').split('\n');
+  var paperIDAndTitle = fs.readFileSync(idToTitleFile, 'utf8').split('\n');
+  for (var i = 0; i < paperIDAndTitle.length; i++) {
+    var tokens = paperIDAndTitle[i].split(delimeter);
     var id = tokens[0];
     var title = tokens[1];
-    if (title != undefined && id != undefined && paper_id_subset.indexOf(id) > -1) {
-      title_to_id[title.toLowerCase()] = id;
+    if (title !== undefined && id !== undefined && paperIDSubset.indexOf(id) > -1) {
+      titleToID[title.toLowerCase()] = id;
     }
   }
 }
 
-function getPaperId(paper_title) {
-  var modified_title = paper_title.substring(0, paper_title.length-1).toLowerCase();  // take off period and do case insensitive comparison
-  return title_to_id[modified_title];
+// retrieves the collection from the db specified by collection name, creating it
+// if it does not already exist
+function getOrCreateCollection(db, collectionName) {
+  db.collection(collectionName, {strict:true}, function(err, col) {
+      if (err) {
+        db.createCollection(collectionName, {}, function(err, createdCol) {
+          if (err) {
+            return err;
+          }
+        });
+      }
+    });
+  return db.collection(collectionName);
 }
 
-
-
-// MongoDB stuff
-
-// // compose documents
-// var paper = {'_id' : filename,
-//        'title' : paper_title};
-
-// // insert into collections
-// var paperCollection = db.collection("papers");
-// var chunkCollection = db.collection("chunks");
-// paperCollection.insert(paper, function(err, result) {});
-
-
-// var dbPath = "mongodb://localhost/exciting";
-// MongoClient.connect(dbPath, function(err, db) {
+// Performs fuzzy matching to try and find a matching paper title
+// and associated paper ID from an extracted title
+function getPaperId(paperTitle) {
+  // take off period and do case insensitive comparison
+  var modifiedTitle = paperTitle.substring(0, paperTitle.length-1).toLowerCase();
+  return titleToID[modifiedTitle];
+}
