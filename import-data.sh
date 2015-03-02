@@ -4,7 +4,7 @@
 cd data
 if [ ! -e repo-exclude/aan ]; then
   wget https://www.dropbox.com/s/i9r9akdptyzm6pj/aanrelease2013.tar.gz?dl=0
-  tar -xzf aanrelease2013.tar.gz
+  tar -xzf aanrelease2013.tar.gz?dl=0
   rm aanrelease2013.tar.gz
   mv aan repo-exclude/
 fi
