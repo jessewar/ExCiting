@@ -7,6 +7,6 @@ Run `sh import-data.sh` to get any database updates and to get the aan dataset
 
 
 ## NLTK
-  -Run `pip install nltk`:
-  -Run this from a python session: `nltk.download()`
-  -Install all of the packages for the easiest time.
+  - Run `pip install nltk`:
+  - Run this from a python session: `nltk.download()`
+  - Install all of the packages for the easiest time.
