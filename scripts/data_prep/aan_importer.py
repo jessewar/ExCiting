@@ -56,7 +56,6 @@ class aan_importer:
           mappings[paper_id] = []
         
         mappings[paper_id].append(split_line[1])
-
     return mappings
 
   '''
@@ -71,9 +70,3 @@ class aan_importer:
         fulltext = f.read()
 
     return fulltext
-    
-
-
-
-
-

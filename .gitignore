@@ -4,6 +4,5 @@
 output/
 data/repo-exclude/
 
-
 # Compiled python files should not be included
 *.pyc

@@ -14,7 +14,6 @@ def main():
   
   # get collection
   collection = db.papers
-
   # Clear collection
   collection.drop()
 
@@ -43,8 +42,6 @@ def imported_aan_data(path_to_aan_release_year):
     mappings[paper_id]['authors'] = []
     fulltext = importer.fulltext_for_paper_id(paper_id)
     mappings[paper_id]['abstract'] = get_abstract(fulltext)
-
-
     if paper_id in papers_and_authors:
       author_ids = papers_and_authors[paper_id]
       
