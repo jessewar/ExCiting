@@ -4,9 +4,9 @@ import os
 
 def main():
   # Edit these lines to match your local filesystem
-  paper_list_file = "../data/papers_citing_threshold_papers.txt"
-  output_dir = "../data/paper_subset/"
-  papers_source_dir = "../../aan/papers_text/"
+  paper_list_file = "../../data/papers_citing_threshold_papers.txt"
+  output_dir = "../../data/repo-exclude/paper_subset/"
+  papers_source_dir = "../../data/repo-exclude/aan/papers_text/"
 
 
   #create directory for our files
