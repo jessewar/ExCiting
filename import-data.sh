@@ -12,3 +12,4 @@ fi
 tar -xzf repo-include/database-dump.tar.gz
 mongorestore database-dump
 rm -rf database-dump
+cat repo-include/database-changes.js | mongo
