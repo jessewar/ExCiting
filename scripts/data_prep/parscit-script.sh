@@ -1,5 +1,5 @@
 #!/bin/bash
-for file in ../data/paper_subset/raw/*.txt
+for file in ../data/repo-exclude/paper_subset/raw/*.txt
 do
     filename="${file#*raw/}"
     filename="${filename%.txt}"

@@ -13,7 +13,7 @@ class aan_importer:
   Returns mapping from
   {<paper_id> : {'title' : <paper_title>, 'year' : <year published>}, ...}
   '''
-  def paper_ids_to_identifiers(self):
+  def paper_ids_to_identifiers(self, papers = None):
     paper_map_path = self.aan_release_path + "paper_ids.txt"
     # paper_ids = []
     mappings = {}
@@ -23,7 +23,11 @@ class aan_importer:
         if len(split_line) != 3:
           print split_line
 
-        mappings[split_line[0]] = {'title' : split_line[1], 'year' : split_line[2]}
+        if papers is not None:
+          if split_line[0] in papers:
+            mappings[split_line[0]] = {'title' : split_line[1], 'year' : split_line[2]}
+        else:
+          mappings[split_line[0]] = {'title' : split_line[1], 'year' : split_line[2]}
     return mappings
 
   '''

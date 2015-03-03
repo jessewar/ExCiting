@@ -2,36 +2,50 @@ import pymongo
 import aan_importer
 import re
 
+
+
 '''
 Builds the mongo papers collection
 '''
 def main():
+
   # connect to mongod instance
   client = pymongo.MongoClient()
-
   # get database
   db = client.exciting
-  
   # get collection
   collection = db.papers
-  # Clear collection
-  collection.drop()
 
   # import data from aan (CHANGE THIS LINE IF NEEDED)
-  paper_data = imported_aan_data('../../data/repo-exclude/aan/release/2013/')
+  import_path = '../../data/repo-exclude/aan/release/2013/'
+  import_papers(collection, import_path)
+  # citing_papers = db.citing_papers
+  # import_papers(citing_papers, import_path, citing_papers_subset())
+
+
+def import_papers(mongo_collection, aan_import_path):
+  # Clear collection
+  mongo_collection.drop()
+
+  uw_papers = papers_set('../../data/uw_papers.txt')
+
+  paper_data = imported_aan_data(aan_import_path, full_papers_set())
 
   for paper_id in paper_data:
     paper = paper_data[paper_id]
     insertable = { 'paper_id' : paper_id, 'authors' : paper['authors'], 'year' : paper['year'], 'title' : paper['title'], 'abstract' : paper['abstract'] }
-    collection.insert(insertable)
+
+    insertable['uw_paper?'] = True if paper_id in uw_papers else False
+    mongo_collection.insert(insertable)
+
 
 '''
 Returns mapping of the form:
 {<paper_id> : {'title' : <title>, 'year' : <year>, 'authors' : [<author_name>, ...] }, ... }
 '''
-def imported_aan_data(path_to_aan_release_year):
+def imported_aan_data(path_to_aan_release_year, paper_set):
   importer = aan_importer.aan_importer(path_to_aan_release_year)
-  papers = importer.paper_ids_to_identifiers()
+  papers = importer.paper_ids_to_identifiers(paper_set)
   papers_and_authors = importer.papers_to_authors()
   authorids_and_names = importer.author_id_to_names()
 
@@ -49,10 +63,21 @@ def imported_aan_data(path_to_aan_release_year):
       for author_id in author_ids:
         author_names.append(authorids_and_names[author_id])
       mappings[paper_id]['authors'] = author_names
-
-    
-
   return mappings
+
+def papers_set(filepath):
+  papers = []
+  with open(filepath, 'r') as f:
+    for line in f:
+      papers.append(line.rstrip())
+  return papers
+
+def full_papers_set():
+  papers = papers_set('../../data/papers_above_threshold.txt')
+  papers = papers + papers_set('../../data/uw_papers.txt')
+  papers = papers + papers_set('../../data/papers_citing_threshold_papers.txt')
+  papers = papers + papers_set('../../data/papers_citing_uw_papers.txt')
+  return papers
 
 '''
 Returns the abstract for this paper.
