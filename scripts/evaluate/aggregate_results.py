@@ -33,13 +33,13 @@ def main():
       continue
     aggregate['abstract-summary'] = abstract
     k_means_summaries = k_means_summarize.get_summaries_for_paper(paper_id)
-    pp.pprint(k_means_summaries)
-    # aggregate['cluster-summary'] = k_means_summaries
+    # pp.pprint(k_means_summaries)
+    aggregate['cluster-summary'] = k_means_summaries
     aggregated_results.append(aggregate)
     # break
 
 
-  # pp.pprint(aggregated_results)
+  pp.pprint(aggregated_results)
 
 
 def paper_ids_corpus():
