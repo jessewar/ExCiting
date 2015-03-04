@@ -209,7 +209,7 @@ def main():
 
 	# get output collection
 	output_col = db[sys.argv[2]]
-	output_col.drop()
+	# output_col.drop()
 
 	# things to insert
 	inserts = []

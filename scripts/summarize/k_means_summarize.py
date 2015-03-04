@@ -42,6 +42,19 @@ def get_summaries():
     paper_summaries[doc[u'cited_paper']] = [cluster1summary, cluster2summary, cluster3summary]
   return paper_summaries
 
+
+def get_summaries_for_paper(paper_id):
+  summarizer = frequency_summarizer.FrequencySummarizer()
+  collection = db.clusters2
+  clusters = collection.find({"cited_paper" : paper_id})
+  summaries = []
+  for doc in clusters:
+    summaries.append(summarizer.summarize(".".join(doc[u'0']), 1) if u'0' in doc else "")
+    summaries.append(summarizer.summarize(".".join(doc[u'1']), 1) if u'1' in doc else "")
+    summaries.append(summarizer.summarize(".".join(doc[u'2']), 1) if u'2' in doc else "")
+
+  return summaries
+
 # def compare_to_naive():
 #   k_means = get_summaries()
 #   naive = naive_document_summarization.get_summaries()

@@ -1,0 +1,9 @@
+
+{
+  "paper_cited" : "<paper_id>",
+  "abstract-summary" : ["<two sentences from abstract>"],
+  "k-means-summary" : ["<summary of each of two k-means clusters>"],
+  "clustered-ngrams-summary" : [
+    {"ngram" : "<ngram string>",
+     "sentence" : "<best containing sentence>"}]
+}
