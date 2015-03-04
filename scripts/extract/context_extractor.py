@@ -190,6 +190,14 @@ def main():
 	"""
 	main
 	"""
+	if len(sys.argv) != 3:
+		print("""usage: 
+			python 
+			context_extractor.py 
+			from_chunks_collection
+			to_extraction_collection""")
+
+
 	# connect to mongod instance
 	client = pymongo.MongoClient()
 
@@ -197,10 +205,11 @@ def main():
 	db = client.exciting
 
 	# get chunk collection
-	chunk_col = db.chunks
+	chunk_col = db[sys.argv[1]]
 
 	# get output collection
-	output_col = db.re_sentence_extractions
+	output_col = db[sys.argv[2]]
+	output_col.drop()
 
 	# things to insert
 	inserts = []
@@ -219,7 +228,7 @@ def main():
 				'cited_paper' : cited_paper,
 				'extraction' : citation_context})
 
-	# output_col.insert(inserts)
+	output_col.insert(inserts)
 
 if __name__ == '__main__':
 	main()
