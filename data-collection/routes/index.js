@@ -66,13 +66,11 @@ router.post('/email-response/', function(req, res, next) {
     // Clean body
     req.body.precision = parseInt(req.body.precision)
     req.body.recall = parseInt(req.body.recall)
-
-
-
     db.get('evaluation_responses').insert(req.body, function(err, docs) {
        if (err) throw err;
+    
+       res.render('email-response-received', {title : 'Response Received'});
     });
-    res.send("Posted");
   } 
 });
 
