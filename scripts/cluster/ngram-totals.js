@@ -7,6 +7,7 @@ var server = new Server('127.0.0.1');
 var min_ngram_size = 1;
 var max_ngram_size = 5;
 var ngram_totals = {};
+//var extractionCollection = server.db("exciting").getCollection("filtered_extractions");
 var extractionCollection = server.db("exciting").getCollection("re_sentence_extractions");
 var extraction_docs = extractionCollection.find().toArray();
 var num_extractions = extractionCollection.count();

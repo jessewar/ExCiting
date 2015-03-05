@@ -7,17 +7,21 @@ var Server = require("mongo-sync").Server;
 
 var db = new Server("localhost").db("exciting");
 var extraction_collection =  db.getCollection("re_sentence_extractions");
-var ngram_collection = db.getCollection("ngrams2");
+//var extraction_collection =  db.getCollection("filtered_extractions");
+var ngram_collection = db.getCollection("ngrams");
+//var ngram_collection = db.getCollection("ngrams_filtered2");
 var total_extractions = extraction_collection.count();
 var papers_above_threshold = fs.readFileSync("./papers_above_threshold.txt", "utf8").split("\n");
 papers_above_threshold.forEach(function(paper_id) {
   var extraction_docs = extraction_collection.find({cited_paper:paper_id}).toArray();
+  var unigram_counts = getNgramCountObject(extraction_docs, 1);
   var bigram_counts = getNgramCountObject(extraction_docs, 2);
   var trigram_counts = getNgramCountObject(extraction_docs, 3);
   var fourgram_counts = getNgramCountObject(extraction_docs, 4);
   var fivegram_counts = getNgramCountObject(extraction_docs, 5);
   // calculate tf-idf
   var result = {cited_paper: paper_id,
+		unigrams: getNgramData(unigram_counts),
                 bigrams: getNgramData(bigram_counts),
                 trigrams: getNgramData(trigram_counts),
                 fourgrams: getNgramData(fourgram_counts),
@@ -58,6 +62,17 @@ function getNgramCountObject(extraction_docs, n) {
     }
   });
   return ngram_counts;
+}
+
+// returns the number of stop words in an array
+function numStopWords(ngram) {
+  var numStopWords = 0;
+  ngram.forEach(function(word) {
+    if (stopwords.indexOf(word) >= 0) {
+      numStopWords++;
+    }
+  });
+  return numStopWords;
 }
 
 function printResult(result, ngrams) {
