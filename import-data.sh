@@ -3,9 +3,9 @@
 #Initializes the project by extracting data, running preprocesing, etc
 cd data
 if [ ! -e repo-exclude/aan ]; then
-  wget https://www.dropbox.com/s/i9r9akdptyzm6pj/aanrelease2013.tar.gz?dl=0
-  tar -xzf aanrelease2013.tar.gz?dl=0
-  rm aanrelease2013.tar.gz
+  wget -O ./aan.tar.gz https://www.dropbox.com/s/i9r9akdptyzm6pj/aanrelease2013.tar.gz?dl=1
+  tar -xzf aan.tar.gz
+  rm aan.tar.gz
   mv aan repo-exclude/
 fi
 
