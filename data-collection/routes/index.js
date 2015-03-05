@@ -6,4 +6,50 @@ router.get('/', function(req, res, next) {
   res.render('index', { title: 'Express' });
 });
 
+
+/* GET email-reponse */
+router.get('/email-response/', function(req, res, next) {
+  var paper_id = req.query.paper;
+  var db = req.db;
+
+  // TODO: Need better error checking than this
+  if(!paper_id) {
+    // res.send("error");
+    var err = new Error('Invalid Parameters');
+    err.status = 500;
+    next(err);
+  }
+  else {
+    
+    getContentsForPaper(db, paper_id, function(paper_contents){
+      
+      console.log(paper_contents);
+
+      res.render('email-response-form', 
+        {
+          title : 'Summarization Evaluation',
+          paper_name : paper_contents.paper.title
+        });
+    });
+  }
+
+  function getContentsForPaper(db, paper_id, viewRenderFn){
+    paper_collection = db.get('papers');
+
+    paper_collection.find({"paper_id" : paper_id}, {}, function(err, docs) {
+      paper_info = docs[0];
+      
+      aggregation_collection = db.get('aggregated_results');
+      aggregation_collection.find({"paper_id" : paper_id}, {}, function(err, docs) {
+        aggregated_info = docs[0];
+
+        contents = {'paper' : paper_info, 'aggregate' : aggregated_info};
+        viewRenderFn(contents);
+      });
+    });
+  }
+});
+
+
+
 module.exports = router;
