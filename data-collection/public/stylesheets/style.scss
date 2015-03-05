@@ -1,0 +1,33 @@
+body {
+  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
+  // font-weight: 300;
+  font-weight: normal;
+  p {
+    color: #444;
+  }
+
+  padding-bottom: 20px;
+}
+
+h4 {
+  text-decoration: underline;
+}
+
+label {
+  cursor: pointer;
+  // * {
+  //   cursor: pointer;
+  // }
+  // font-e
+
+  // text-align: center;
+  p {
+    text-align: left;
+  }
+}
+
+.summaries {
+  label {
+    font-weight: normal;
+  }
+}

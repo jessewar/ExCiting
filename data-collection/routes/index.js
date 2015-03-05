@@ -14,13 +14,11 @@ router.get('/email-response/', function(req, res, next) {
 
   // TODO: Need better error checking than this
   if(!paper_id) {
-    // res.send("error");
     var err = new Error('Invalid Parameters');
     err.status = 500;
     next(err);
   }
   else {
-    
     getContentsForPaper(db, paper_id, function(paper_contents){
       
       console.log(paper_contents);
@@ -28,7 +26,9 @@ router.get('/email-response/', function(req, res, next) {
       res.render('email-response-form', 
         {
           title : 'Summarization Evaluation',
-          paper_name : paper_contents.paper.title
+          paper_name : paper_contents.paper.title,
+          summaries  : paper_contents.aggregate.summaries,
+          paper_id : paper_id
         });
     });
   }
@@ -50,6 +50,30 @@ router.get('/email-response/', function(req, res, next) {
   }
 });
 
+router.post('/email-response/', function(req, res, next) {
+  var paper_id = req.body.paper_id;
+  var db = req.db;
 
+  console.log(req.body);
+
+  // TODO: Need better error checking than this
+  if(!paper_id) {
+    var err = new Error('Invalid Parameters');
+    err.status = 500;
+    next(err);
+  }
+  else {
+    // Clean body
+    req.body.precision = parseInt(req.body.precision)
+    req.body.recall = parseInt(req.body.recall)
+
+
+
+    db.get('evaluation_responses').insert(req.body, function(err, docs) {
+       if (err) throw err;
+    });
+    res.send("Posted");
+  } 
+});
 
 module.exports = router;

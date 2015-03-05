@@ -1,7 +1,1 @@
-body {
-  font: 14px "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-a {
-  color: #00B7FF;
-}
+body{font:14px "Helvetica Neue",Helvetica,Arial,sans-serif;font-weight:normal;padding-bottom:20px}body p{color:#444}h4{text-decoration:underline}label{cursor:pointer}label p{text-align:left}.summaries label{font-weight:normal}

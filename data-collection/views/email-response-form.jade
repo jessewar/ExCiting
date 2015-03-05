@@ -2,9 +2,39 @@ extends layout
 
 block content
   h2= paper_name
-  .row
-    .col-sm-12
-      h4 Which summary of this paper is best?
+  form(method="post", action="")
+    hr
+    h4 Which summary of this paper is best?
+    .row.summaries
+      - var col_width = parseInt(12 / summaries.length)
+      - each summary in summaries
+        div(class="col-sm-" + col_width)
+          label
+            p= summary.summary
+            input(type="radio", name="best-summary", value=summary.name)
+    hr
+    h4 How true is that description? (precision)
+    - var descriptions = [" - This is a false or actively misleading statement about the paper", "", " - This is a somewhat true, but not misleading, statement about this paper", "", " - This is a true statement about the paper"]
+    - for(var i=1; i < 6; i++)
+      .radio
+        label
+          input(type="radio", name="precision", value=i) 
+          p #{i} #{descriptions[i-1]}
+    hr
+    h4 How much of your paper does it describe? (recall)
+    - var descriptions = [" - Describes nothing about the paper", "", " - Somewhat describes one concept in the paper", "", " - Describes one or more major takeaways from your paper well"]
+    - for(var i=1; i < 6; i++)
+      .radio
+        label
+          input(type="radio", name="recall", value=i)
+          p #{i} #{descriptions[i-1]}
+    input(type="hidden", name="paper_id", value=paper_id)
+    input(type="submit")
+
+
+                
+
+
       
 
       
