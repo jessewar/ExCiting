@@ -21,6 +21,18 @@ def main():
   import_papers(collection, import_path)
   # citing_papers = db.citing_papers
   # import_papers(citing_papers, import_path, citing_papers_subset())
+  # 
+  
+  # cursor = collection.find()
+  # result = []
+  # for doc in cursor:
+  #   doc[u'abstract'] = cleaned_abstract(doc[u'abstract'])
+  #   result.append(doc)
+
+
+  # collection.drop()
+  # collection.insert(result)
+
 
 
 def import_papers(mongo_collection, aan_import_path):
@@ -105,7 +117,16 @@ def get_abstract(fulltext):
 
       if lastmatch is not None:
         abstract = fulltext[lastmatch.end():]
-  return abstract
+
+  return cleaned_abstract(abstract)
+
+
+def cleaned_abstract(abstract):
+  abstract = abstract.replace("\n", " ")
+  abstract = abstract.replace("- ", "")
+  abstract = abstract.replace("  ", " ")
+  
+  return abstract.strip()
 
 if __name__ == '__main__':
   main()

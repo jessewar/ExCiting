@@ -6,6 +6,7 @@ sys.path.append('../summarize/')
 
 import frequency_summarizer
 import k_means_summarize
+import get_extractions
 import pymongo
 import pprint
 from nltk.tokenize import sent_tokenize
@@ -23,24 +24,27 @@ def main():
   aggregated_results = []
 
   papers_abstracts = paper_ids_to_abstracts(paper_ids_corpus())
-  # pp.pprint(papers_abstracts)
-
+  paper_extractions = get_extractions.above_threshold(1, 're_sentence_extractions')
 
   for paper_id in papers_abstracts:
     aggregate = {'paper_id' : paper_id}
-    abstract = summarize_abstract(summarizer, papers_abstracts[paper_id]) 
-    if abstract == "":
+    aggregate['abstract-summary'] = summarize_abstract(summarizer, papers_abstracts[paper_id]) 
+    # Throw out papers without an abstract
+    if aggregate['abstract-summary'] == "":
       continue
-    aggregate['abstract-summary'] = abstract
-    k_means_summaries = k_means_summarize.get_summaries_for_paper(paper_id)
-    # pp.pprint(k_means_summaries)
-    aggregate['cluster-summary'] = k_means_summaries
+    
+    aggregate['naive-summary'] = naive_summarization(summarizer, paper_extractions[paper_id])
+    # Throw out papers who had no extractions
+    if aggregate['naive-summary'] == "":
+      continue
+
+
     aggregated_results.append(aggregate)
-    # break
+  
+  db.aggregated_results.drop()
+  db.aggregated_results.insert(aggregated_results)
 
-
-  pp.pprint(aggregated_results)
-
+  # pp.pprint(aggregated_results)
 
 def paper_ids_corpus():
   collection = db.re_sentence_extractions
@@ -53,7 +57,13 @@ def paper_ids_corpus():
 
 def summarize_abstract(summarizer, abstract):
   num_sentences = len(sent_tokenize(abstract))
-  return summarizer.summarize(abstract, 2) if num_sentences > 2 else abstract
+  return summarizer.summarize(abstract, 1)[0] if num_sentences > 1 else abstract
+
+def naive_summarization(summarizer, extractions):
+  extractions = [x.strip() for x in extractions]
+  document = ". ".join(extractions) 
+  summary = summarizer.summarize(document, 1)
+  return summary[0] if len(summary) > 0 else ""
 
 def paper_ids_to_abstracts(paper_ids):
   collection = db.papers
