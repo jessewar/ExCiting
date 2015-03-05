@@ -27,18 +27,20 @@ def main():
   paper_extractions = get_extractions.above_threshold(1, 're_sentence_extractions')
 
   for paper_id in papers_abstracts:
-    aggregate = {'paper_id' : paper_id}
-    aggregate['abstract-summary'] = summarize_abstract(summarizer, papers_abstracts[paper_id]) 
-    # Throw out papers without an abstract
-    if aggregate['abstract-summary'] == "":
-      continue
+    aggregate = {'paper_id' : paper_id, 'summaries' : []}
     
-    aggregate['naive-summary'] = naive_summarization(summarizer, paper_extractions[paper_id])
-    # Throw out papers who had no extractions
-    if aggregate['naive-summary'] == "":
+    summary = {'name' : 'abstract-summary', 'summary' : summarize_abstract(summarizer, papers_abstracts[paper_id])}
+    # Throw out papers without an abstract
+    if summary['summary'] == "":
       continue
-
-
+    aggregate['summaries'].append(summary)
+    
+    summary = {'name' : 'naive-summary', 'summary' : naive_summarization(summarizer, paper_extractions[paper_id])}
+    # Throw out papers who had no extractions
+    if summary['summary'] == "":
+      continue
+    aggregate['summaries'].append(summary)
+    
     aggregated_results.append(aggregate)
   
   db.aggregated_results.drop()
