@@ -1,3 +1,4 @@
+import re
 import string
 import sys
 #haaaccky
@@ -12,10 +13,13 @@ returns list of sentences
 '''
 def sentences_containing_ngram(sentences, ngram):
   matched_sentences = []
-  ngram_substring = " ".join(ngram.split(","))
+  regexp = re.compile("[- :;.,]".join(ngram.split(",")))
   for sentence in sentences:
-    if ngram_substring in sentence.lower():
+    if re.search(regexp, sentence):
       matched_sentences.append(sentence)
+
+    # if ngram_substring in sentence.lower():
+      # matched_sentences.append(sentence)
   return matched_sentences
   
 
