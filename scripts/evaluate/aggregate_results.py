@@ -4,6 +4,7 @@ sys.path.append('../extract/')
 sys.path.append('../cluster/')
 sys.path.append('../summarize/')
 
+import sentences_with_ngram
 import frequency_summarizer
 import k_means_summarize
 import get_extractions
@@ -40,6 +41,19 @@ def main():
     if summary['summary'] == "":
       continue
     aggregate['summaries'].append(summary)
+
+    ngram = ngram_for_paper(paper_id)
+    # print ngram
+
+    summary = {'name' : 'best-ngram-sentence', 'summary' : best_ngram_sentence(summarizer, ngram, paper_extractions[paper_id]), 'ngram' : ngram}
+    if summary['summary'] == "":
+      continue
+    aggregate['summaries'].append(summary)
+
+    summary = {'name' : 'longest-ngram-sentence', 'summary' : longest_ngram_sentence(ngram, paper_extractions[paper_id]), 'ngram' : ngram}
+    if summary['summary'] == "":
+      continue
+    aggregate['summaries'].append(summary)
     
     aggregated_results.append(aggregate)
   
@@ -47,6 +61,34 @@ def main():
   db.aggregated_results.insert(aggregated_results)
 
   # pp.pprint(aggregated_results)
+
+def ngram_for_paper(paper_id):
+  cursor = db.best_ngrams.find({"cited_paper" : paper_id})
+  for doc in cursor:
+    return doc[u'ngram']
+
+def best_ngram_sentence(summarizer, ngram, extractions):
+  if ngram is not None:
+    sentences = sentences_with_ngram.sentences_containing_ngram(extractions, ngram)
+    if len(sentences) == 0:
+      return ""
+    document = ". ".join(sentences) 
+    result = summarizer.summarize(document, 1)
+    if len(result) == 0:
+      return ""
+    return result[0]
+  else:
+    return ""
+
+def longest_ngram_sentence(ngram, extractions):
+  if ngram is not None:
+    sentences = sentences_with_ngram.sentences_containing_ngram(extractions, ngram)
+    if len(sentences) == 0:
+      return ""
+    in_order = sorted(sentences, key=len)
+    return in_order[-1].strip() + "."
+  else:
+    return ""
 
 def paper_ids_corpus():
   collection = db.re_sentence_extractions
