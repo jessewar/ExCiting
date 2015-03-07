@@ -27,12 +27,10 @@ function constructMessage(name, papers) {
 
 var seen = [];
 var email_chunks = db.getCollection("emails").find().toArray();
-//email_chunks.forEach(function(email_chunk) {
-for (var i = 0; i <= 3; i++) {
-  var email_chunk = email_chunks[i];
+email_chunks.forEach(function(email_chunk) {
   var mailOptions = {
     from: 'Jesse Warren <jesse.warre@gmail.com>', // sender address
-    to: 'jesse.warren@live.com', // list of receivers
+    to: 'jesse.warren@live.com, excitingtest15@gmail.com', // list of receivers
     subject: 'Feedback requested for Information Extraction project at the University of Washington', // Subject line
     html: '<p>' + constructMessage(email_chunk.name, email_chunk.papers) + '</p>'
   };
@@ -43,10 +41,8 @@ for (var i = 0; i <= 3; i++) {
     } else {
       console.log('Message sent: ' + info.response);
     }
-    sleep.sleep(4);
+    sleep.sleep(1);
   });
-}
-
-//});
+});
 
 server.close();
