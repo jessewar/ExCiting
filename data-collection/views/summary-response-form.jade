@@ -1,0 +1,33 @@
+extends layout
+
+block content
+  p.alert.alert-success Thank you for your responses! What do you think about the other summaries for your paper?
+  form(method="post", action="/summary-response/")
+    input(type="hidden", name="precisions[#{hidden_summary.name}]", value="#{hidden_summary.precision}")
+    input(type="hidden", name="recalls[#{hidden_summary.name}]", value="#{hidden_summary.recall}")
+    - each summary in summaries
+      .row
+        .col-sm-6
+          blockquote=summary.summary
+      .row
+        .col-sm-6
+          h4 How true is that description? (precision)
+          - var descriptions = [" - This is a false or actively misleading statement about the paper", "", " - This is a somewhat true, but not misleading, statement about this paper", "", " - This is a true statement about the paper"]
+          - for(var i=1; i < 6; i++)
+            .radio
+              label
+                input(type="radio", name="precisions[#{summary.name}]", value=i) 
+                p #{i} #{descriptions[i-1]}
+        .col-sm-6
+          h4 How much of your paper does it describe? (recall)
+          - var descriptions = [" - Describes nothing about the paper", "", " - Somewhat describes one concept in the paper", "", " - Describes one or more major takeaways from your paper well"]
+          - for(var i=1; i < 6; i++)
+            .radio
+              label
+                input(type="radio", name="recalls[#{summary.name}]", value=i)
+                p #{i} #{descriptions[i-1]}
+      hr
+    
+
+    input(type="hidden", name="paper_id", value=paper_id)
+    input(type="submit", value="submit")
