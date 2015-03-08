@@ -1,7 +1,11 @@
 extends layout
 
 block content
-  h2= paper_name
+  h2 #{paper_name}
+  p #[strong Authors:] 
+    - each author in paper_info.authors
+      em=author
+  p #[strong Year published: ] #{paper_info.year}   
   form(method="post", action="")
     hr
     h4 Which summary of this paper is best?

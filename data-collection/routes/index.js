@@ -20,16 +20,25 @@ router.get('/email-response/', function(req, res, next) {
   }
   else {
     getContentsForPaper(db, paper_id, function(paper_contents){
-      
       console.log(paper_contents);
 
-      res.render('email-response-form', 
-        {
-          title : 'Summarization Evaluation',
-          paper_name : paper_contents.paper.title,
-          summaries  : paper_contents.aggregate.summaries,
-          paper_id : paper_id
-        });
+      if(!paper_contents.aggregate) {
+        var err = new Error('Paper not found');
+        err.status = 500;
+        next(err);
+      }
+      else {
+         // Shuffle paper summaries
+        paper_contents.aggregate.summaries = shuffleArray(paper_contents.aggregate.summaries);
+
+        res.render('email-response-form', 
+          {
+            title : 'Summarization Evaluation',
+            paper_name : paper_contents.paper.title,
+            summaries  : paper_contents.aggregate.summaries,
+            paper_id : paper_id
+          });
+      }
     });
   }
 
@@ -75,3 +84,18 @@ router.post('/email-response/', function(req, res, next) {
 });
 
 module.exports = router;
+
+
+/**
+ * Randomize array element order in-place.
+ * Using Fisher-Yates shuffle algorithm.
+ */
+function shuffleArray(array) {
+    for (var i = array.length - 1; i > 0; i--) {
+        var j = Math.floor(Math.random() * (i + 1));
+        var temp = array[i];
+        array[i] = array[j];
+        array[j] = temp;
+    }
+    return array;
+}
