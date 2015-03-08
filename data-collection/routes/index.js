@@ -139,8 +139,6 @@ router.post('/summary-response/', function(req, res, next) {
       res.render('email-response-received', {title : 'Response Received'});
     });
   } 
-
-
 });
 
 
@@ -151,8 +149,6 @@ function secondFormCtrl(req, res, next) {
     summaries = aggregated_info.summaries.filter(function(summary, ind) {
       return summary.name != req.dataProcessed.chosen_summary;
     });
-
-
 
     res.render('summary-response-form', {
       paper_id : req.dataProcessed.paper_id,
