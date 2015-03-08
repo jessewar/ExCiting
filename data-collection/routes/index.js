@@ -28,7 +28,7 @@ router.get('/email-response/', function(req, res, next) {
         next(err);
       }
       else {
-         // Shuffle paper summaries
+        // Shuffle paper summaries
         paper_contents.aggregate.summaries = shuffleArray(paper_contents.aggregate.summaries);
 
         res.render('email-response-form', 
@@ -76,8 +76,10 @@ router.post('/email-response/', function(req, res, next) {
     req.body.precision = parseInt(req.body.precision)
     req.body.recall = parseInt(req.body.recall)
     db.get('evaluation_responses').insert(req.body, function(err, docs) {
-       if (err) throw err;
-    
+       if (err) {
+        next(err)  
+       }
+      
        res.render('email-response-received', {title : 'Response Received'});
     });
   } 
