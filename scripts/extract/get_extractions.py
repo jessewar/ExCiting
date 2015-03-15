@@ -22,6 +22,26 @@ def main():
   pp.pprint(extractions)
 
 
+def for_paper(paper_id, collection_name=None):
+  if collection_name is None:
+    collection_name = 're_sentence_extractions'
+
+  grouped_extractions = db[collection_name].aggregate([
+    {"$match" : {
+      "cited_paper" : paper_id
+    }},
+    {"$group" : {
+      "_id" : {
+        "cited_paper" : "$cited_paper"
+      },
+      "extractions": {
+        "$push" : "$extraction"
+      }}
+    }])
+
+  return grouped_extractions['result'][0][u'extractions']
+
+
 '''
 Returns {'paper_id' : [<extractions>], ...}
 '''
