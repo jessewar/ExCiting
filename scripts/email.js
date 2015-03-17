@@ -9,7 +9,7 @@ var transporter = nodemailer.createTransport({
   service: 'Hotmail',
   auth: {
     user: 'jesse.warren@live.com',
-    pass: 'captaincrunch28!'
+    pass: 'notactuallyapassword',
   }
 });
 
