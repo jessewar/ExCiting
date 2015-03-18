@@ -1,6 +1,6 @@
 # ExCiting Project
 ExCiting tries to make understanding research papers easier by summarizing the citations and descriptions that other authors have written about a paper. 
-Read more about the project [here](about.md).
+Read the full report on the project [here](https://www.dropbox.com/s/ry8of5i79xu8kbt/writeup.docx?dl=0).
 
 ## Usage
 #### Dependencies
