@@ -1,7 +1,0 @@
-Features for extraction:
--- If there is a single citation or list of citations at the conclusion of a sentence, take the whole sentence and apply it to each citation.
--- If there's more than one citation per sentence, see if they are on different phrases/sentences joined by a conjunction. If they are, extract the two sibling phrase/sentences and assign each one to the citation they contain/
--- If a citation is used as a subject of a sentence, take the rest of the sentence as a description.
--- If a citation directly follows a NP, then that NP might be descriptive.
-
-** Coreferences might be nice...
